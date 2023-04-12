@@ -1,0 +1,2028 @@
+commit c306ad1bd00cd4fe48cd1e6413c331e80ab5368d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jun 12 23:47:09 2022 -0500
+
+    removes cross-env NODE_OPTIONS=--openssl-legacy-provider
+
+commit 729cd50ffdeb7afc6e5b3ee0951dbeeb56ed8532
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jun 12 23:38:52 2022 -0500
+
+    adds engines https://stackoverflow.com/questions/71065040/heroku-shopify-application-error-npm-err-eresolve-unable-to-resolve-dependency
+
+commit 79447b1ead77edd8f06508d17368e2b48f8aa548
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jun 12 23:28:15 2022 -0500
+
+    switches to test server
+
+commit 169ddf37b232ab6a6920bd297611a67be95037d4
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jun 12 23:27:42 2022 -0500
+
+    stages api url
+
+commit 5e9160274e25e8afde3e009e83df086f72431c4c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jun 12 23:27:25 2022 -0500
+
+    adds Qooley - the backstory pdf :D
+
+commit b351602e40a7e0c65061ec1d878d4519224a2d42
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Apr 18 01:54:20 2022 -0500
+
+    Updates:
+    * Provided that we're already displaying the town name if the user went through the sequence of filtering first then pressing the Venue card which displays the Admission Price underneath, on localhost:3000/venue?venueId=The-Kinetic-Playground maintaining the street address and so displaying the city on the venue page because we're on a new page; we want to prevent redundancies. Instead of the Price, it's going to be the Address in that the Venues card should display the street address below the card. After successfully portraying the address on the venue card, standardizes the admission price field by adding a $ sign before the field. The Admission Price field has been standardized, meaning when new venues are created the admission price carries no more than one dollar sign. For testing purposes, makes sure fake venues aren't showing up on prod by deleting fake venues before pushing to prod to seem realistic! For pages/venue.js, the tutorial is concentrated on using the useEffect hook which, according to https://reactjs.org/docs/hooks-effect.html, is most similar to componentDidMount and componentDidUpdate.
+    
+    * As a result, includes the tutorial https://medium.com/@allynak/how-to-use-google-map-api-in-react-app-edb59f64ac9d command navigator.geolocation.getCurrentPosition(success) from componentDidMount. Goes in this order: this.success calls this.setCurrentPosition. We get a different error if we do markers without the map. Google Maps Integration - when they click on the card, adds Google Maps integration so they can look at the venue on the map. The price range is a drop-down on the venues. If they want to see where the venue is at, they can click on it. They can also click on the information card on the map. Removes HTTPS frontend-backend compatibility explanation for the backend API route on next.config.js on the front-end. Recall that where someone fills out a new venue through the /venues page, the qooley-webapp signup should make a card on the website; test out with a fake venue.
+    
+    * developers.google.com/maps/get-started#api-key
+    * How to Use Google Map API in a React App. Begin with medium.com/@allynak.
+    (1) Create a Google Map account and generate the API Key
+    (2) Install the NPM package
+    (3) Rendering. Proper Import Libraries: react, @react-google-maps/api
+        * GoogleMap
+        * LoadScript
+        * Marker
+        * InfoWindow
+    
+    (4) Create the MapContainer component with attributes
+         * mapStyles
+         * defaultCenter, rendering the first GoogleMap component.
+    
+    * Removes unused imports
+    
+    * The defaultCenter being located in Barcelona, you will not be able to view the map without defining a size. You can also define default lat and lng where the map should center upon first render.
+    
+    * Import the Marker component from '@react-google-maps/api' and instead of closing the Google Map component
+     {
+       locations.map(item => {
+         return (
+           <Marker key={item.name}
+           position={item.location}
+         )
+       })
+     } </GoogleMap>
+    
+    * What else are the parameters for the LoadScript, GoogleMap, Marker components? They are found on https://react-google-maps-api-docs.netlify.app/.
+    
+    * The location object must actually have lat and lng as keys. The tutorial pivots to no array of locations and anything related to the markers and infoWindows. Focus on rendering the map with a maker on the current location of the user, using the Geolocation API. The Navigator.geolocation read-only property developer.mozilla.org/en-US/docs/Web/API/Navigator/geolocation returns a Geolocation object. Dragging the marker sets the current location locally.
+    
+    * "Instead of the Price, it's going to be the Address." "The Venues card should display the street address below the card."
+    
+    * localhost:3000 is where the address should be displayed, on this.state.carouselDisplay['Venues']
+    
+    * Instead of { venueData && venueData.priceRange } want { venueData && venueData.locationAddress } which does not include the venueData.city attribute. This necessitates modifying the .reactMultiCarouselCardStars class which raises the question, are the styles getting applied on hover?
+    
+    * Modifies the CSS to such an extent that the .reactMultiCarouselCardStars class attributes are maintainted in a different form such that the text doesn't take up more than 100% width.
+    
+    * To match the font size of Immersive Experiences duration, the font size is now 1.285vh. What else you can inspect element from .immersiveExperienceDuration is white-space: nowrap; padding-bottom: 0.75em; text-align: left; align-self: flex-end;.
+    
+    * Instead of messing with the priceOptions[i].label.split(' ').slice(1).join() it is better to fix the problem at its source: modify the priceOptions object itself, for venues. Specifically, instead of modifying pages/venue.js the display page, want to modify localhost:3000/venues Admission Price (4) which is from this.state.allPriceRanges from the this.state = {... initial declared value. Changes the label property which means that whenever a new venue is created, the price renders with one dollar sign per integer.
+    
+    * Makes new venues Adler Planetarium and Shedd Aquarium while recycling the old.
+    
+    * On localhost:3000/venues, should we not change the URL slug from /venues to /signup-venues or something similar? Because right now, anyone with the link can create a new venue.
+    
+    * Should we impose a Phone Number format such as the Shedd Aquarium phone number (312) 939-2438 on the localhost:3000/venues page?
+    
+    * The External Links (Optional) field does not seem to be capturing the key press "," or Enter. Yes the regExp function works, but why would we ever need to truncate (ignoring underscores and hyphens) all our tags; that is where are we using the TagsSubmission component? It appears that one cannot create Immersive Experiences unless one is logged in. The TagsSubmission component governs the submission of YOUR external links.
+    
+    * On the Edit Profile page which likewise doesn't allow the submission of https://en.wikipedia.org/wiki/Shedd_Aquarium and therefore the fault lies within the TagsSubmission component because !this.validUrl(trimmedInput) because prior to validUrl, the trimmedInput goes through this.regExp(this.state.input).trim();. TagsSubmission is imported and used within External Links Edit Profile and Venues External Links (Optional).
+    
+    * Updates the swal constructor
+     swal({
+       title:
+       text:
+       icon:
+       duration:
+     }), for when the URL isn't valid.
+    
+    * The External Links (Optional) maintains the same blue background color as the other boxes: background-color: rgb(232, 240, 254).
+    
+    * Since /qooleybiz?true is white and /venues is rgb(232, 240, 254), it might be worth it to pass down boolean as props to the component TagsSubmission. The resulting ternay on pages/tagsSubmission.js is based on this.props.blue.
+    
+    * Having new swal({... for invalid URLs; the class constructor requires the new keyword.
+    
+    * On the How To Use Google Map API in React App article by @allynak, now when the user clicks on the marker, an infoWindow opens with the name of the object and an x button to close the component.
+    
+    * It's important to get everything, from the mapStyles object to the defaultCenter object, rendering.
+    
+    * What kind of Map does one get if the System Preferences > Security & Privacy > Location Services checklist is enabled for Chrome? If it is not enabled for Chrome?
+    
+    * Why can't we continue short circuit evaluation like { console.log(this.state.currentPosition) && this.state.currentPosition.lat && (<Marker position={this.state.currentPosition} />) } in JSX?
+    
+    * The onDragEnd function variable is innate to the Marker component.
+    
+    * We need to do the conversion from venue address to venue latitude and longitude. All we need to do is turn the locations object
+    const locations = [
+      {
+        name: "Location 1",
+        location: {
+          lat: 41.3954,
+          lng: 2.162
+        },
+      }, ...
+    ]
+    into a name, location, and possibly a description.
+    
+    * How to populate the <InfoWindow component on React Google Map API that is Geocoding rapidapi.com/blog/google-maps-api-react/ or npmjs.com/package/react-geocode.
+    
+    * Currently, the marker is not editable. Translates venue address into the latitude longitude marker: yes, the API key is optional if you want to use the Google Maps Geocoding API.
+    
+    * developers.google.com/maps/documentation/geocoding => use the Maps JavaScript API key after enabling the Geocoding API.
+    
+    * What does it mean to enable the Geocoding API? It means to, on console.cloud.google.com/google/maps-apis/api-list?project=qooleybiz, select a maps-related Additional APIs member and really like the shadow and spotlight on Credentials: top-right Learn tab: Restrict your API key tutorial because it reveals that the API key, the manually-created Server Key appellation, exists on Credentials.
+    
+    * After enabling Maps API key access for Geocoding, currently displaying the Map hinges on navigator.geolocation.getCurrentPosition(this.success).
+    
+    * Feeds the Venue address into Geocode like Geocode.fromAddress(this.state.venueData.locationAddress + ", " + this.state.venueData.city).
+    
+    * The "let" keyword lets us modify objects declared outside the scope of the React component.
+    
+    * onSelect really becomes displayInfoWindow.
+    
+    * Removes vast swathes of commented-out code and console logs.
+    
+    Todo:
+    * From within @react-google-maps/api, it's important to add clickable InfoWindows; that means
+     {
+       this.state.selected.location &&
+       <InfoWindow
+       position={this.state.selected.location}
+       clickable={true}
+       onCloseClick={ () =>
+        this.setState({
+          selected: {}
+        })}
+     }> <p>{this.state.selected.name}</p>
+     </InfoWindow>
+    
+    * Standardize the Admission Price field by adding a $ sign before the field. The reason for this is that the numerous $ signs are for the sake of display because the expert cards are rendering price underneath, whereas the venue cards are instead rendering address.
+    
+    * Test the TagsSubmission component.
+         * Venue submission should redirect you to that venue's page.
+         * Social Media Links on /venue need to be truncated to fit the width of the profile page.
+    
+    * Test deletion of externalLinks. ExternalLinks should allow submission of Wikipedia image links; what is validUrl doing?
+    
+    * Read the GoogleMap component documentation.
+    
+    * Want zoom to show up to the distance between you and the venue.
+
+commit 16e12d6219dabc2ba68764e8dd7c31dd1c8d654e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 22 23:38:21 2022 -0500
+
+    sweetalert2 instead of sweetalert
+
+commit e0c789c5800293ad5b279f7b3fe5e9de006bb0a5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 22 23:16:15 2022 -0500
+
+    The TagsInput component should not be imported from react-tagsinput
+
+commit 9365ff752ef3c181ce67911e4b913a28c36a01b9
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 21 23:57:09 2022 -0500
+
+    This commit is to address the 500 | Internal Server Error, to fix the missing Error: Cannot find module 'react-tagsinput'. Aside from API keys being relevant to the POST, USE, PUT, DELETE, and GET routes on the backend, and aside from the assignment of function calls like SweetAlert2.fire({}) having the exception of pages/venues.js, where SweetAlert2.fire({}) takes the form of a constructor.
+    
+    Todo: add timestamp like ei to the URL.
+    
+    Based on pluralsight.com/guides/hiding-secret-keys-in-create-react-app, the initiative is to create a .env file at the root.
+    // .env
+    FIREBASE_API_KEY=...
+    FIREBASE_MESSAGING_SENDER_ID=
+    FIREBASE_APP_ID=...
+    
+    Add .env to .gitignore
+    // .gitignore
+    .env
+    
+    Make an API call with a Secret key in your <App /> component
+    
+    const API_KEY=process.env.FIREBASE_API_KEY
+    
+    In public/index.html
+    <title>%FIREBASE_API_KEY%</title>
+    
+    https://console.cloud.google.com/apis/credentials
+    
+    The font difference between class names mainpageExpertSignup and mainpageSubHeaderSignup is that the latter has a -webkit-text-stroke: 1 px block; which has been commented out.
+    
+    qooley.com/login, Continue takes the browser to https://www.qooley.com/local?userId=, Edit Profile page. The (X) GET https://www.qooley.com/qooleybiz?true leads to 500 | Internal Server Error because the /qooleybiz?true reaches 500 internal server error because on the qooley-frontend app (see the Papertrail add-on), the Error: Cannot find module 'react-tagsinput' is a part of the Edit Profile page. With heroku run bash, run npm commands. With heroku logs -t --app qooley-frontned, see console logs like Error: Cannot find module 'react-tagsinput' and GET requests. With the Papertrail add-on of Heroku, server logs exist, the same on dashboard.heroku.com/apps/qooley-frontend. A CORS-related error can be achieved even with permission from qooley-webapp middleware; so long as frontend expects imports and the imports are not provided.
+    
+    The case-sensitive paths webpack plugin is part of webpack configuration. Building a tag input field component solves the 500 | Internal Server Error. blog.logrocket.com/building-a-tag-input-field-component-for-react, for which input is the local input, tags are the collection of tags and isKeyReleased determines what the TagsSubmission component does. For ESLint, Webpack and NPM, there seem to be some challenges associated with the updating, and the configuration such as eslint.workingDirectories (lifesaver.codes/answer/failed-to-load-plugin-react-declared-in-react). The first step is to render tags passed to the component, expanding upon just <input /> with three different key types ",", "Backspace", and onKeyUp. While focusing on the text box, isKeyReleased toggles from key press to key release. The TagsSubmission component has keys input, isKeyReleased, tags, and trimmedInput. The types of input events are:
+    
+    * onChange(event). This event is required only for listening to the changes on the input field and updating the input state variable. event.target.value accumulates <input text because value = {this.state.input} />. The container related classes in -grid.scss have padding-right, padding-left: 15px; which are ported to the in-line style={{}} div.
+    
+    * onKeyDown(event). Destructures the key property of event. Since input is accumulated on this.state.input by onChange, onKeyDown is for keys "," and "Backspace", and concatenates trimmed input (because tags should not have whitespace) from this.state.input to this.state.tags and vice versa.
+    
+    * onKeyUp sets the value of isKeyReleased to true, since onKeyDown sets the value of isKeyReleased to false.
+    
+    In the fashion of react-tagsinput, sets styles like padding to 15px, border color width and radius to be determined, and border style to 'solid', without margin auto for the sake of display flex with flex-wrap quackit.com/css/flexbox/examples/flexbox_grid_examples.cfm. There are gaps of 5px, and justifyContent: center padding-left has been moved to 7.5px.
+    
+    The deleteTag function filters the existing tags on this.state based on index which is inherent in the { () => deleteTag(index) } onClick method of <button ... />. This requires the multiplication symbol x to be drawn, (meyerweb.com/eric/tools/color-blend/) which allows the existing button to more easily be clicked on.
+    
+    The Qooley colors are light blue and purple, which means #519de3 and #5f0455, and which matches the rest of the buttons and tittles #5f0455. Aside from functionality, rgb 81, 157, 227 is navy blue and rgb 88 81 156 is the blend between navy blue and rgb 95 4 85, Qooley purple which constitutes the text color. In the <TagsInput /> component from react-tagsinput, class styles being the react-tagsinput class, the value = {this.state.tags} onChange = {this.onChange}. This might be clear for github1s users.
+    
+    The TagsSubmission component is originally imported, from pages/tagsSubmission.js for which are provided propFunction; replaces the base component TagsInput import from 'react-tagsinput' and only modifies the TagsInput component within the tagsSubmission.js file by replacing it.
+    
+    Thanks to the creators, at npmjs.com/package/react-tagsinput has the data type for tags of String[]. It is worth it to retain regexp tag validation, which can be done within onChange to make available advanced validation. In onChangeInput, tag .replace(/([^\w-\s]+)|(^\s+)/g,""), docs.trifecta.com/display/DP/Supported+Special+Regular+Expression+Characters the forward slash character is used to denote the boundaries of the regular expression. www3.ntu.edu.sg/home/ehchua/programming/howto/Regexe.html. Parentheses are for group sub-expressions for overriding the precedence. [^\w-\s means any characters which do not match between a word and a whitespace and this includes integers but not characters like *|&@(#$. (jsfiddle.net). .replace(/\s+/g, "-") means globally match one or more whitespaces and replace with one or more hyphens. This means that all our tags are truncated to ordinary words separated by hyphens.
+    
+    The pages/tagsSubmission is as follows: the users collection has all new externalLinks property on each user email document. However, on localhost:3000/qooleybiz?true, this.state.tags out of all { tags: Array(8), isKeyReleased: false, input: '', trimmedInput: '' } for which input is transferred into the next comma-separated element on trimmedInput locally, while tags is derived from the database. In order to parse trimmedInput, first filter the tags by regular expressions and then put a list of tags on this.state which is rendered in blue undeneath the purple tags. For most events, except perhaps the event.key=="Meta" event, we can handle and parse. Apply regular expressions to this.state.input, instead of apply regexp to this.state.tags.map((tag) => . That is instead of this.state.trimmedInput being continually derived from this.state.tags, it should be derived from the momentary variable this.state.input. These tags are rendered in a different color like the existing this.state.
+    
+    These tags are supposed to be External Links, so they need formatting like Social Media links.
+    
+    Functions, all reused code need to be moved to their own separate files. Only the last external link will be valid on the database because propFunction exists, and in this is the assumption that this.state.externalLinks is an array of comma-separated tags. This is all a part of the propFunction which is invoked, during the onChange function in tagsSubmission.js. If the submit scope were in the tagsSubmission.js, wishfully then the submit scope should be used. onKeyDown is the scope of tag submission, if key ===',' and this.state.input still exists after trimming, and neither the preexisting tags nor the new tags exist, ... this is the place to call this.props.propFunction (event.target.value isn't cumulative!) on [...this.state.tags, ...this.state.newTags]. No need to distinguish between trimmedInput and input on this.state when trimmedInput is an intermediary stage between this.state.input and this.state.newTags.
+    
+    Look at sweetalert2.github.io/#examples for sweetalert previews. If the trimmed input is not valid by RegExp standards, then, since the !this.validUrl and the propFunction are in if/else statements, the validity of the URL is a prerequisite for POSTing both to the frontend and to the qooleybiz.users.email externalLinks object on the user's document, then it should not get posed locally. The TagsInput component has been discontinued.
+    
+    To solve (!) Reference Error: index is not defined occurs when clicking the delete button styled x. {() => this.deleteTag(index)} doesn't need to change because the index is from somewhere else:
+    
+    The {tags.map((tag, index) => (<div className="tag">{tag}<button onClick={()=>deleteTag(index)...} index has been added back. Then, the delete button appears to be working locally whereas on the database there is no change, therefore the parameter data structure need to be considered. Clicking on the Delete Tag x causes redirect to localhost:3000/local?userId= which hinges on, upon login in componentDidMount, this.props.query !== '' or upon click x in the global scope of the submitEdits function, when accessing localhost:3000/qooleybiz?true, this.props.query = { true: "" }.
+    
+    On qooleybiz/index.js, when we are logged out it gives GET 400 (Bad Request) infinite redirect loop error message: Error: Request failed with status code 400. This error is thrown during the first try/catch block of componentDidMount; user database queries in succession. GET http://localhost:4000/logout 400 (Bad Request), Uncaught (in promise) Error: Request failed with status code 400, Warning: Can't perform a React state update on an unmounted component, TypeError: Cannot read properties of null (reading 'email'). The redirect on click reaches submitEdits because <Form onSubmit={this.submitEdits} as the console responds to the guess. This could be a good use case for event.prev. This doesn't have to happen in-line. e.preventDefault can happen within the function submitEdits itself, e.preventDefault being for preventing the default HTML derived event.
+    
+    The value this.state.externalLinks does not reflect the deletion, data["externalLinks"]=this.state.externalLinks, meaning deleted tags are still being returned from tagsSubmission.js. What propFunction is doing is variably setting the parent component's this.state.externalLinks while only being invoked on press ",". propFunction should be returning the value of non-deleted tags. The deleteTag function is filtering out undesirable tags. propFunction is only invoked for each key press "," and really should be invoked to update the parent state whenever there is a change in the local state so posibly invoke the propFunction within the deleteTag function.
+    
+    Testing External Links on Edit Profile and on Signup yields (!) Unhandled Runtime Error ReferenceError: tags is not defined, Line 103, if (key==='BackSpace' && !this.state.tags.length && tags.length) should be tags && tags.length so that pressing Backspace when there are no tags does not run this block of code. One can delete external links. They don't show up on the database unless this.props.propFunction[...this.state.tags, ...this.state.newTags, this.state.input] is called upon. Frontend changes on /qooleybiz?true aren't actually submitted to the database unless the user clicks Save. This particular most recently deleted tag (and not the previously deleted tags) error of still remaining on the database can be resolved by, instead of using the delayed value of this.state.tags even after setting this.state. Solve this issue by spelling out as a variable which is available faster than this.state.tags, for which
+    
+    -----let tags = this.state.tags.filter((tag,i) => i !== index)
+    -----this.props.propFunction([...tags, ...this.state.newTags, this.state.input]).
+    
+    (!) It appears that a blank tag is submitted to the database when if (key === 'Backspace' && !this.state.input.length && this.state.tags.length) then Backspace deletes tags, not text.
+    
+    (!) deleting a tag causes the blank link "" to show up on the database. This blank link doesn't get sent to this.props.propFunction from pages/tagsSubmission.js but it does get put on this.state.externalLinks in pages/local?userId= which means (back before pages/qooleybiz/index.js sends us to /local?userId=' + this.state.profileData.username), that the data object on submitEdits is reflecting the blank link from this.state.externalLinks on submitEdits, pages/qooleybiz/index.js, the propFunction is not the culprit; this.state.input, being set to '' means that what we pass to propFunctio nin deleteTag shouldn't include this.state.input because instead of Enter key inserting this.state.input, delete click does not regard what the user has just entered and instead regards only the existing tags, original and new and staged tags, staged on this.state.input are not to be submitted unless the Enter key has been pressed for that value of this.state.input.
+    
+    propFunction is on, within deleteTag, [...tags, ...this.state.newTags] and excludes this.state.input. Now that this issue has been solved, (!) Pressing Backspace doesn't finalize the deletion and (!) Press all of the delete buttons and all of the corresponding external links will remain undeleted. Array.prototype.pop() removes the last elements from the array, and changes the length of the array. The solution is to, on "Backspace", invoke this.props.propFunction. ([...tagsCopy, ...this.state.newTags]). The tags are being set to [] on pages/qooleybiz/index.js. In pages/qooleybiz/index.js, unlike data["externalLinks"], bio and whybook are required whereas externalLinks cannot be assumed to be with length greater than 0, which means: *removes the this.state.externalLinks.length > 0 requirement.
+    
+    On qooley.com/signup qooley.com/qooleybiz, External Links (optional) has more permissive URL checking, the divs are centered with variable row length accommodating the box width standardized. Furthermore, qooley.com/local?userId= is designed to center the external links when *they need some styling. These external links have been left-justified. This commit is designed to fix the Error: Cannot find module 'react-tagsinput' present on my.papertrailapp.com/systems/qooley-frontend/events.
+
+commit 8f886e29470ed00716f9da4477914919e128dd50
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 8 19:06:36 2022 -0600
+
+    imports Router on ./pages/local.js
+
+commit 4931ae659f772dcf67bb29d0d5bb485e24d92160
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 8 18:07:43 2022 -0600
+
+    on ./pages/login.js, removes console log with API key
+
+commit 1af429fa3d94516a93aa24043db134977edd7751
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 8 17:47:27 2022 -0600
+
+    Makes environment variables accessible with Next.js by adding the prefix NEXT_PUBLIC_ to all .env API key=value pairs and therefore environment variable references (https://stackoverflow.com/questions/70492167/next-js-environment-variables-not-working-in-my-local-system) so that we can sign up and log in.
+
+commit 456da3ef9604c9fcf66a72cfe05b66856a7376d3
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 8 16:41:36 2022 -0600
+
+    resolving remote: ModuleNotFoundError: Module not found: Error: Can't resolve 'fs' in '/tmp/build_7845c088/node_modules/next/dist/lib' (https://maikelveen.com/blog/how-to-solve-module-not-found-cant-resolve-fs-in-nextjs) by adding webpack configuration to next.config.js
+
+commit d3f377637eb0737be014d1748df438aaf2251265
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 8 01:08:03 2022 -0600
+
+    Places API keys in process.env: in ./public/index.html, removes the comments and script src for the Places Autocomplete widget (https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete#maps_places_autocomplete-html), so that firebaseConfig and Google Signup are based on .env which may then be included in .gitignore (https://www.pluralsight.com/guides/hiding-secret-keys-in-create-react-app). The font difference between class names mainpageExpertSignup and mainpageSubHeaderSignup is that the latter has a -webkit-text-stroke: 1px block; which has been commented out.
+
+commit eb999d2dac83365159effdaf08b6f4d2116a4f05
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Mar 3 16:52:50 2022 -0600
+
+    For ./pages/index.js, puts 1em (current font size) of space between Why Us? by editing .mainpageWhyQooleyHeader and .mainpageWhyQooleyFlexbox :) the .mainpageExpertSpotlightMain height has been set to auto for all screen sizes at once instead of being variably defined for screens depending on which side of 800px width. Mobile View: sets exploreOurExpertsMobileScreen line-height to match the Boost Engagement div and this means 1.5em line-height. Creating a separate CSS class for mobile divs is unnecessary, given that the scope of @media is clearly indented. For 799px or lower screen size, changes line-height to 1em on .exploreOurExperts. To keep up with the .mainpageWhyQooleyHeader having 1em on top and bottom, sets the height on it to 200px, which allows the .mainpageWhyQooley to adaptively adjust to the height block. On the Admin Dashboard, Index Page, Local, Qooleybiz Corporate, Qooleybiz Index, Signup, and Venues, to solve the TypeError: Class constructor SweetAlert cannot be invoked without 'new', imports SweetAlert2 from 'sweetalert2'; and rather than assigning const swal = new SweetAlert2(); for the sake of consistency with the existing code, calls upon new SweetAlert2(). Except on pages/venues.js with the SweetAlert2.fire({}) constructor form. Removes unused imports on ./pages/qooleybiz/index.js and on adminDashboard along with the assignment of function calls, on /qooleybiz/index.js and on /venues.js. Removes commented-out code and API calls, on qooleybiz and on adminDashboard.
+
+commit 1a5aa6ea31a8b5efb528df749dcf4b48de6e1914
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 1 21:57:23 2022 -0600
+
+    pushes sweetalert2 to prod
+
+commit da784f88580ddda2f1e8ba04b00573c9e1fc8555
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 1 21:48:19 2022 -0600
+
+    to solve the Error: Cannot find module 'sweetalert', references sweetalert2 instead of sweetalert
+
+commit a7092330978564ee9066b2c125a1f9dc5153938d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 1 18:34:44 2022 -0600
+
+    API URL to prod
+
+commit 44c94abac4f17fa566c6f5d9ef7df38bdb2ba46b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 1 18:33:58 2022 -0600
+
+    evens out spacing between section titles
+
+commit 6a3e6442fcdf5689611ddd7061b2410eefdb470a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Feb 26 22:33:38 2022 -0600
+
+    * On the Home React Component, adds class exploreOurExpertsMobileScreen which aligns the text to the left with a margin of 1em. Instead of the light blue style being in-line, innately defines the color lightblue in the .exploreOurExperts class. Generates the boostEngagement class which takes on the font-size, family, and weight, as well as the color, position and text-alignment (these are 30px, Open Sans, sans-serif and 500, white, relative, and center respectively) of the original in-line styles. The boostEngagementMobileView class gains overflow-wrap, and similarly instead of setting in-line gridTemplateColumns, adds servicesAndPackagesFullDiv and servicesAndPackagesMobileVersion and fixes the width and height of an image in the .serviceDivImg class.
+    * servicesAndPackages and href #exploreOurExperts have been reused to host images on the Boost engagement and retention at your company! To free up in-line space on pages/index.js, the serviceDivTitle class holds all accompanied div properties like transform, height, and font.
+    * For the sake of ameliorating redundancies, on the onboarding, team building, engagement, and perks & rewards sections moves the color property further up the div hierarchy.
+    * Corrects class to className and on globals.css, corrects border to solid on hover for .servicesAndPackages.
+    * The grid-template-columns CSS property repeats 3 elements per row, with (https://css-tricks.com/introduction-fr-css-unit/) fraction of the remaining free space.
+    * When visitors hover over the “What We Specialize In” text, displays swal alert with position top-start, button false, and a timer with icon false such that the text displays for 1500 milliseconds. Instead of in-line swal, includes helper function swalWhatWeSpecializeIn.
+    * Full-justifies the text under Planning a Custom Event?, and because most browsers don’t support the text-justify: inter-character property, includes width: 17.5vw on .mainpageTestimonial such that the testimonials are easier to read and changes font size to 1em;. Justifies the mainpageWantToHostText and the mainpageUniqueCultureText, mainpageHealthWellbeingText, & mainpageOnboardingText, and the About Us page with text-justify: inter-character.
+
+commit 45795056278439663bf56eeb75185577e100b089
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 27 22:16:44 2022 -0600
+
+    * Models ./pages/venue.js after the order of elements in the ./pages/venues.js venue signup form, and Venue External Links Display: extracts externalLinks from this.state.venueData, so we can include that missing field and provide continuity and consistency between the signup page and the display page, while checking for the existence of each variable before displaying it via the && operator’s potential for short-circuit evaluation.
+    * Includes linkedinURL in submission from ./pages/venues.js. Renames Admission Price field on ./pages/venue.js and orders the elements according to the order on ./pages/venues.js. Splits the externalLinks string by the ‘,’ character and maps to line-separated divs.
+    * On ./pages/index.js, changes exploreOurExperts id to exploreOurServices, so that the button redirects to the next page as before. On the ‘Boost engagement and retention at your company!’ section, places all divs as Nav.Link divs introducing the servicesAndPackages class for its on-hover effects, in addition to invoking the ReactGA handleButtonClick function and the href #exploreOurExperts which links to the next page (Explore Our Experts) after the Services and Packages page.
+    * On the ‘What We Specialize In’ section, includes https://www.w3schools.com/howto/howto_css_image_overlay_slide.asp with proper text justification which allows us to overlay text on a relatively positioned container, relative to the nearest parent flexbox item contrasted with an absolutely positioned overlay, with overflow hidden (so that text doesn’t appear to the left of the image when it’s not being hovered on) and alignment to the bottom, left, and right. The text wraps neatly with 90% of the overlay width, and as a special effect each overlay attains a width of 100% when the container for the overlay is hovered upon.
+
+commit 35df73aadeb7264f761883aaf4065809f3a213dd
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Jan 25 23:12:04 2022 -0600
+
+        * Puts a line break between image and description on ./pages/venue
+        * Removes background image and sets color of text on ./pages/venues to #5f0455, and changes h3 from Venue to Add Venue.
+        * Comments out background of .venues class
+        * On ./pages/venues, expands the textarea on 'Amenities & Accessibility' as well as on 'What makes us unique?', to height: "9em”, and makes them optional. Capitalizes Optional.
+            * Moves Notes to underneath the Description and changes the name to What to bring and how to prepare - adds How to Prepare / What to Bring to the title, and sets the height to 9em.
+            * Adds spacing between the text fields (on ./pages/venues).
+            * To fix the issue of no picture render unless the carousel is clicked, rather than dispatching non-existent element functions like onClick, includes $('.BrainhubCarousel__arrowRight').trigger('click') within the componentDidMount interval; uses jQuery to simulate clicking on the right arrow.
+        * In ./pages.activity.js to fix long load times only on localhost:3000 and the test server, puts componentDidMount into the asynchronous setInterval function which, in this case, runs the original componentDidMount code once the email is fetched from this.props.router.query.email.
+        * Moves Venue.js title to before the cover image, both of which are rendered after the Navbar and before the venuesInformation div, matching the white color of the Navbar text. Also displays Venue.js title after the cover image, with the #5f0455 color. The cover image takes up the whole page like the /local profile. Removes background color.
+        * Adds style={{ textAlign: 'justify', textJustify: 'inter-word' }} to paragraphs Description, Amenities & Accessibility, Notes, and What Makes Us Unique, which justifies them fully.
+        * For venue.js, creates .venuePageTitle class which shares all style properties with .activityPageTitle.
+        * On ./pages/index.js, removes the handleSelect function because it’s redundant, and binds the citySelect function to this.
+        * Adds border radius 0.25rem to the TagsSubmission class .react-tagsinput to match the fields on venues.js.
+        * Drop-down for price on /venues same as for the artists and experts signup; creates venuesDropdownMenu identifier for the .dropdown-menu and .dropdown-menu .show classes which set the background-color to transparent, border to none, height to auto, and width to 100%, all of which contribute to the menu’s design. Importing handleButtonClick which is for Google Analytics, DropdownButton and Dropdown from ‘react-bootstrap’ and initializing the nested objects in the allPriceRanges array which is on this.state, this binds priceSelect which defines the priceRange on this.state and it is the priceSelect function along with handleButtonClick which is implicated in the DropdownButton and Dropdown.Item divs of the drop-down menu. The dropdown items have the price.label as the eventKey.
+            * On the drop-down sets the venuesDropdownItem:hover to be rgb(38 143 255 / 50%);, which is the same color as the .btn:focus box shadow color of the DropdownButton, for which the #venuesDropdownPriceRange id matches the background color of the form fields rgb(232, 240, 254); and for which the font size is 0.75em and the text is aligned to the left.
+            * On the form, submits this.state.priceRange instead of the form controlId priceRangePreference.
+        * On the /venue Profile page moves Notes to underneath the Description, same order as the /venues creation page.
+        * For CSS classes .currencyInput, #venuesDropdownPriceRange, #venuesDropdownItem, associated side effects of the background color change from white to transparent are none.
+        * Replaces helloThere with reactMultiCarouselCard.
+        * On ./pages/index.js, changes “Explore our Experts below” to “Explore our Services and Packages below”.
+        * On ./pages/index.js, removes the Contact Us part with social media links and removes the Logos and Testimonials because we have those below.
+        * On ./pages/venues.js, removes as=“button” from the DropdownButton so that instead of triggering form submit on price range select, we can set the title property of the DropdownButton div to be a ternary displaying this.state.priceRange or alternatively “How does your price work?”. And makes sure externalLinks and instagramURL, twitterURL, facebookURL, are drawn from this.state instead of being drawn from the e.target.elements from on the submitForm function, so that on ./pages/venue.js they can be retrieved and rendered.
+
+commit 43b66c3ce5fcdbd1d6517d23a47b75fb29b2cd50
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jan 23 01:18:36 2022 -0600
+
+    to solve Build error occurred
+    TypeError: firebase__WEBPACK_IMPORTED_MODULE_8__.storage is not a function, import 'firebase/storage'.
+
+commit 3db70e6afe9c608e126446716a379be05e8eb3b5
+Merge: 79edf3f 29a12ec
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Jan 22 23:37:07 2022 -0600
+
+    resolves merge conflict
+
+commit 79edf3fb221b70834444662a8f7bc370e0dab655
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Jan 22 23:24:04 2022 -0600
+
+    On ./pages/index.js puts 'Venues' category on the initial this.state. Remove console logs. On ./pages/index.js, fetching all database venues filtering by this.state.city, pushes venue link with card along the line of the expert cards. With regex, places venue name with spaces replaced by hyphens on the venue card URL. In ./pages/venues.js, creates uploadPhotos function based on const storageRef = firebase.storage().ref() which is the basis object. Referring to the Firebase storage collection document venues and the storageRef object's child, updatePhotos has storageRef `venues/photos/${officialName}/${file.name}`. Creates changeCoverImg along the line of uploadPhotos, making one change from venues/photos/${officialName}/${file.name} to venues/coverImg/${officialName}/${file.name}. In ./pages/venues.js where changeCoverImg originally did not make use of the officialName appellation, currently providing the officialName parameter and preparing the uploadItems object for de-structuring by turning it into array form, the effect being to enable Venues' submission of cover images. Makes the venue structure such that each venue name has a coverImg folder and its constituent photos. At the Firebase Storage Ref for venues/venueName, fetches all res and by extension res items properties, for which each item has an imageRef parameter. Initializes venue images empty array on this.state so that the array can be updated based on the current value on this.state similarly to a reducer. With method chaining, updates the venue images and venue cover images (after making the awaited database query) with the help of the venuesHelperFunction on ./pages/index.js which allows us to access this.state within the .listAll() async await Firebase API function. Once the venue images are on this.state they can render within the Card.Img src. Instead of pulling venue images and cover images off of this.state, actually sends them first to the venuesHelperFunction. Instead of fetching venues on refresh() within the existing responseAllVenues, since we're awaiting Firebase Storage requests we do it within a separate async fetchVenues() function which then calls the venuesHelperFunction. With dot notation, refers to the variable namd and that's why we use bracket notation; to specify reference to a variable. Moves await this.fetchVenues() to the beginning of async componentDidMount in order to make venue data freely available to the refresh() function. When refreshing, fetches venue cover image from this.state, and renders as the card image with a default image as well. Creates ./pages/venue.js after ./pages/activity.js, initializing super() in the constructor, setting the Navbar on this.state, and initializing ReactGA in the try/catch block in componentDidMount. On .pages/venue.js, the staging page for the venues, adds firebaseConfig, initializes the app, and creates the Venue class component such that venue fetching is governed by the getVenue function, which is bound to this and which includes the setTimeout function to recursively call itself until reaching the venueId which arrives on this.props.router.query. After fetching the venueId, replaces dashes with spaces and, assuming there is no hashtag, successfully accesses the Firebase Storage Bucket at venues/${router}, loading the imageRef and its type (the last three characters) so that we can populate the showcase object with its basis on this.state and with ReactPlayer or img, depending on whether or not the type is .mov. After this, accesses the subfolder venues/${router}/coverImg and then sets these URLS & the showcase on this.state. Shout out to some really cool CSS designs at https://www.magicpattern.design/tools/css-backgrounds which inspired my isometric cubes background! On componentDidMount, ensures that both the showcase and cover image are being fetched by re-rendering the component by this.setState({}), at an interval of 100 milliseconds. Then initializes ReactGA, fetches all venue data, and filters the one matching this.state.router which is our venue ID. On the render() section, de-structures the venue data and modeled after the ./pages/activity.js page, renders the venue page in no particular order with the expert carousel mobile version and the classical screen version both included on the front-end.
+
+commit cf64c70d70f9e908db057e6feb90e8bdb1e5a112
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jan 9 18:12:02 2022 -0600
+
+    Removes "Other" category, adds $ on Admission Price on ./venues. On ./pages/index.js, while reusing the classes exploreOurExpertsDiv and class & id exploreOurExperts, right after the first main page section adds Explore our Services and Packages <Row>. In in-line CSS on the Explore our Services and Packages main row, fits out display grid for upcoming categories Artists & Entertainers, Immersive Experiences, Speakers & Coaches, Venues, Company Swag, and Event Services with display grid with 3 columns justified to the center with width and margin auto and equal, 20px grid column gap and grid row gap such that we are able to overlay text over the images with the help of linear transformations (translate). After that, creates What We Specialize in section with ONBOARDING, TEAM BUILDING, ENGAGEMENT, and PERKS & REWARDS titles and images with flex-box horizontal. Includes Clients & Testimonials with custom flex-box and within it gridTemplateColumns for 4 columns and 4 rows, incrementing from the left side of the grid by over-riding the left value in pixels via in-line styles while still using the .thinkChicago, .universityChicagoMedicalCenter, ..., redShelf CSS classes. This time, unlike the Our Customers section we're not including the white background and are instead overlaying directly on the purple background of #5f0455 currently keeping the width and height of each customer at 100px. At the bottom of ./pages/index.js's Explore our Services and Packages row div, after the properly formatted testimonial with margin-left 10vw, font-weight of 550 which rounds down to 500 at lower values, and text align to the left, creates Contact Us section with Flaticon vector icons. Adds opacity of 50% for the icons flexbox.
+
+commit 29a12ec4b4b5835b05b4e8d5aa3dc864178d7d84
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jan 9 18:12:02 2022 -0600
+
+    Removes "Other" category, adds $ on Admission Price on ./venues. On ./pages/index.js, while reusing the classes exploreOurExpertsDiv and class & id exploreOurExperts, right after the first main page section adds Explore our Services and Packages <Row>. In in-line CSS on the Explore our Services and Packages main row, fits out display grid for upcoming categories Artists & Entertainers, Immersive Experiences, Speakers & Coaches, Venues, Company Swag, and Event Services with display grid with 3 columns justified to the center with width and margin auto and equal, 20px grid column gap and grid row gap such that we are able to overlay text over the images with the help of linear transformations (translate). After that, creates What We Specialize in section with ONBOARDING, TEAM BUILDING, ENGAGEMENT, and PERKS & REWARDS titles and images with flex-box horizontal. Includes Clients & Testimonials with custom flex-box and within it gridTemplateColumns for 4 columns and 4 rows, incrementing from the left side of the grid by over-riding the left value in pixels via in-line styles while still using the .thinkChicago, .universityChicagoMedicalCenter, ..., redShelf CSS classes. This time, unlike the Our Customers section we're not including the white background and are instead overlaying directly on the purple background of #5f0455 currently keeping the width and height of each customer at 100px. At the bottom of ./pages/index.js's Explore our Services and Packages row div, after the properly formatted testimonial with margin-left 10vw, font-weight of 550 which rounds down to 500 at lower values, and text align to the left, creates Contact Us section with Flaticon vector icons. Adds opacity of 50% for the icons flexbox.
+
+commit 977938629da50e82780df38872f414bf73a1e939
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Nov 28 00:44:30 2021 -0500
+
+    On ./pages/activity.js phone version - text is shrunk down with the same ratio between header and text - smaller font so it’s easier to navigate.  Using Chef Alex as the model, we’ve got on /activity the decreased Private Dinners with Food and Drinks title and subtitle text shrunk down with same 65/30 ratio between title and subtitle.  The image fits with 1em space and now, the font-size for h3 is 1.75rem which is greater than 1.25rem for h5, giving a ratio of 1.4 so the activity expert name, which has padding-top: 0; for mobile screens max width 600px refactoring styles into classes for example the .activityText class, will have a font-size of 1.4em while the activity expert category will have a font size of 1em!  The activityMainPageSecondPart class specifically is designed to present a margin of 1em; this will, along with the activityPageTitle class having a width of 100% instead of 100vw, allow the page to have truly centered, minified title and text with a margin border.  For smaller screens (<= 600px) on signup and login, sets width to be 100%, left and right to be 0. :) On ./pages/about.js, optimizes mobile view for header and text boxes.  On ./pages/qooleybiz/corporate.js, for the mobile view allows the text to fill the screen with the qooleyBizCorporateAllEncompassingPage set to margin: 1em 1em 0 1em; which is to say that the margin on the bottom is equal to 0, and refactors in-line styles to globals.css.  With flex-direction column, hides the calendar react-date picker class react-datepicker__month-container and then justifies content to the left.  For the mobile view on ./pages/qooleybiz/index.js when edit ? Is true, refactors in-line paragraph styles into classes and gives them a margin of 1em and maintaining the 65 to 35 ratio between profile name and profile category, shrinks them to the mobile size of 1.85em to 1em and then fleshes out the splashPhoto and splashPhotoOverlay classes, as well as the profilePic, profilePicOverlay, which are adapted from the in-line styles on ./pages/qooleybiz/index.js.  Transfers in-line styles for the main venues div on ./pages/venues.js to globals.css #venuesMain, with which we can set margin to 1em and width to auto for mobile devices, and updates pricing placeholder to include per hour in the prompt.  In ./components/mynavbar.js, adds new section for NavBar such that the venues page has removed the links to “Become a Qooley Expert” or “Already an Expert?” only when on the venues page leaving the “About Us” page there.
+
+commit 198d5393713d52b1ed5c62d932b6c6e3c755b92b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Nov 23 19:50:47 2021 -0500
+
+    Yes the react-https-redirect library is working very well, once you connect to ./pages/index.js.  On ./pages/index.js, from top 1em, pushes the virtual down closer to the title so there’s not as much of a space; cuts the space in half.  On ./pages/venues.js, Price Range Preference Select menu is now a Form.Control as textarea, with placeholder ‘How does your price work?  What pricing works with number of attendees?’, Select menu from ‘City of residence’ to ‘City’, space (line break) <br /> before and after the Venue <h3 /> title.  Based on the ./pages/qooleybiz/index.js signup page or alternatively the ./pages/qooleybiz/corporate.js - the add a new experience page - adds ‘Upload Images and Videos for the Venue’ paragraph HTML tag <p> with ImageGallery component with the property ‘addMediaItem={this.addMediaItem}’, for which the function addMediaItem, derived from ./pages/qooleybiz/index.js (or alternatively ./pages/qooleybiz/corporate.js), is bound to `this` component and takes the blob and file and sets them on this.state.mediaUpload, which is initialized to the empty array type, as well as for which the ImageGallery component itself is imported, from our perspective, from `./qooleybiz/imageGallery.js`.  On ./pages/venues.js, adds a <br /> space after the Form to create some space.  Installs sweetalert2 from sweetalert2.github.io in order to import Swal from ‘sweetalert2’ and then Swal.fire the confirm save message with a creative thumbs up icon and then if saved, the message "Thank you for submitting your venue's information.  We will review the information you have provided, and your venue will be listed on our website, upon approval.  Please contact admin@qooley.com for any questions.”.  Removes Form.Control text field for ‘Pictures’, and instead puts a LinkedIn Form.Control with corresponding LinkedIn name, label, placeholder, and onChange functions…, encapsulating the social media links within a Form.Group so that we can have a controlId=“formBasicSocialMediaLinks”, the data from which can be sent to the database, taking formBasicPictures out of the submission and adds formBasicExternalLinks to the External Links Form.Group (for now we are getting this.state.externalLinks on the form which is what the TagsSubmission component does), removing formBasicAgreeToTermsAndConditions and formBasicCoverImage as well as formBasicCity in favor of this.state.city which makes city selection dynamic, making the block conditional on whether if (this.state.checkboxChecked) is true (else, a Swal alert notifies that ‘Agree to Terms & Conditions needs to be checked.’).  The API request currently deconstructs the form, with accompanying async keyword both on the submitForm function and on the .then statement proposed by Swal.  Within this block, which is conditional on whether this.state.checkboxChecked is true, awaits this.uploadPhotos whenever this.state.mediaUpload.length > 0, along the same line for the existence of this.state.coverImg - awaits this.changeCoverImg.  These two functions, both this.setCoverImg and this.changeCoverImg being this-bound to the component, are currently empty placeholders.  Currently, the submitForm function submits data to the database except photos, for which it is self-contained in that it does not make an API request to send the cover image and venue photos & videos to Firebase.
+
+commit c67800801324d0e084f2947c0cf979acc33a0c46
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Nov 23 03:02:21 2021 -0600
+
+    Makes venues class encompassing the only place where the color change attribute rgb(232, 240, 254) is applied.  Currently, phone number, birthday, brief bio, why should you be booked… are actually required; the browser scrolls up to show the missing fields.  If the profile picture is not uploaded and the category is not selected, then the browser displays a pop-up message saying, Please ensure all required fields are completed.  Npm installs react-https-redirect and wraps the ./index.js component with HttpsRedirect such that the component should redirect us to https. Adds ‘specify how many attendees’ text to ./pages/customBookings.js.  On the ./qooleybiz page from the signup side, introduces the isComplete variable, form.bio.value.length > 0 && form.birthday.value.length > 0 && form.category.value.length > 0 && !!this.state.city && form.funfacts.value.length > 0 && form.phone.value.length > 0 && form.whybook.value.length > 0 && !!this.state.priceRange, which prompts the else statement, within which the alert message ‘Please ensure all required fields are completed’ pops up.  Furthermore, the category drop-down menu is put on this.state which allows category to have field validation text to indicate that it is required, only when it does not exist or when it is equal to ‘Select category’.  Price Range, Fun Facts, Category, City of Residence, are now required indicated with the asterisk * and Social Media Link titles (Instagram, Twitter, Facebook, LinkedIn) are now invisible unless there’s nothing there.
+
+commit e09335b1b3c7aad2229a19b40e6fa206e61da9b9
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Nov 10 22:55:29 2021 -0600
+
+    On ./pages/venues.js, makes Price Range Preference have a width of 100%.  On ./pages/qooleybiz/corporate and ./pages/activity.js, with moment(_).format('MM DD YYYY'), makes sure the experience preview on ./qooleybiz/corporate looks *nearly* exactly like the /activity page, for which the price is month-day-year, and for which the expert *cover* image, name, category, showcase, experience name, category, description, start & end date, duration, notes, activity location and max attendees, and price are available, where meeting location is "Virtual" or "Live", and if "Live" then street city state and zipcode are named.  Changes Admission Price to Your Price on qooleybiz/corporate, and includes on form display price y=[x+0.3]/.771, x is the expert price.  On ./pages/qooleybiz/corporate.js, the time display 3 hours and 30 minutes shortens to _3.5 hrs_, rounding to two digits after the decimal place, string parses right before submission; and by the way changes already existing database entries to this shortened format.  On ./pages/index.js, reduces the font size slightly; does duration and title.  Price aligns left-bottom of experience card.  Yes, immersive experiences are rendering!  On ./pages/venues.js, changes header to "Venue" instead of "Venues", changes "Name" header and placeholder to "Venue Name", and for the social media links, gives options for IG, FB, Twitter, and LinkedIn, just like the other profiles with valid URL check and matching background color for all venue fields.  Since we don't need city of residence for Venue; a venue does not reside somewhere, for the location field breaks it into "Street Address" and "City" dropdown so it can still show up under the city from the sort feature on our front page.  Adds some space between the "Venue" header and the first field at the top of the page.
+
+commit d46855967f1c37e6b03135b21afb1e6d2f7fc15f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Nov 10 14:31:37 2021 -0600
+
+    On the time display, shortens 3 hours and 30 minutes to 3.5 hrs by, on ./pages/qooleybiz/corporate.js, rounding to two digits after the decimal place with a string which parses right before the submission!  Changes existing entries in the database to match abbreviated duration format, reduces the font size of each immersive experience title and duration on ./pages/index.js slightly.  Price aligns on the left-bottom of the expereince card, and the database table for venues is created.
+
+commit ad883e7a2de074d9fe24a17768f6582ce0f0eb43
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Nov 3 22:26:08 2021 -0500
+
+    Creates a new category called “Venue” with the categories Name, Phone Number, Location (Address), Description, Amenities & Accessibility, What makes us unique?, Capacity (Attendance), Social Media Links, Pictures, External Links, Price Range, Agree to T & C button.  Creates the ./pages/venues.js page: Does `touch venues.js` in pages/venues.js, which contains a form with form elements having the backgroundColor rgb(232, 240, 254), which is a computed style from the email type and password Form.Control type, pulling off Form.Group controlIds from e.target.elements and then finding their .value.  On the form, there’s custom height, 11em, and rows='3' set on the Form.Control div.  With Agree to Terms & Conditions checkbox from ./pages/qooleybiz/index.js and accompanying checkboxChecked: false initial value on this.state with this binding for the new handleCheckboxChange function which sets e.target.checked on this.state.  Cover Image is imported from ../components/coverImg.js with accompanying setCoverImg function which is referenced early on in the this.state declaration, which includes the coverImg and splashPhoto initial keys. Models Price Range Preference along the lines of ./pages/qooleybiz/index.js, for which Select is imported from ‘react-select’ and priceRange: null, is initialized on this.state.  From ./pages/qooleybiz/index.js adds custom text for Location (Address), Amenities & Accessibility, What makes us unique?, Capacity (Attendance), Notes, and the City Form element has accompanying Axios filters GET on componentDidMount with TagsSubmission component for getting externalLinks on this.state.  API_URL http://localhost port is 4000 instead of 5000 to solve EADDRINUSE: address already in use.
+
+commit b7861773f3226bc69b394a3ca639e0dffc29829b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Oct 26 21:48:49 2021 -0400
+
+    puts a price field in the Experiences page; installs npm i react-currency-input-field, imports and renders <CurrencyInput which sets activityPrice on this.state.  Adds .value to form.activityMaxAttendees, and conditionally renders _ on ./pages/activity.js!  Pushes to the Immersive Experiences image carousel only if approvedProfileEmails.includes(immersiveActivities[i].email), on ./pages/index.js.  Flags the experiences that are virtual with a "Virtual" sticker - purple background - color #5f0455 - top right corner of the experience card - like the sticker on the first page; sharing style from the virtual label on the ./pages/index.js top page between the virtual label and the experiences' 'virtual' flag, styles the "Virtual" sticker in the top right of the immersive experience card when immersiveActivites[i].immersiveActivity is virtual.
+
+commit e2898df8906d92f44274cd59ac18c54a58835ad8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Oct 25 16:44:02 2021 -0400
+
+    On ./pages/qooleybiz/corporate.js, maintaining one space between each form element, moves activity duration dropdown menu to center below choosing the start date & end date calendar + preview along with the `How long is this activity going to be?` question.  Adds toggle slider for in-line preview & calendar.  On Form.Control & DatePicker, converts onChange to a proper function.  Moves styles from preview div on ./pages/qooleybiz/corporate.js to ./styles/globals.css.  Sets Form.Control value={this.state.endDate ? this.state.endDate : moment(this.state.endDateFull).format().slice(0,10)}.  Maintains continuity of data types (Date() and 2021-10-28) between this.state.startDate & this.state.startDateFull.  On the 'Show Preview' text slider, decreases size and boldens weight.
+
+commit 8fa0b8c36ee74f2b5d83465d66a62a0143c4cac2
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Oct 21 22:30:27 2021 -0500
+
+    Makes it mandatory to add at least one image to the experiences on the experiences page, includes new design for scheduling with in-line calendar, and experience preview.  Since when you upload to Firebase Storage Bucket, which creates a resized image, that is as soon as the image is uploaded Firebase generates a thumbnail, we're able to display compressed images as needed; the cards can fetch the compressed images and on the profile fetch the high-resolution one.  On the frontend, renders experiences which are current even if they don't have a start date or an end date.  On the activity page if there is no address and they select in-person, then says "Address to be determined" without repeating.  Adds a field to experiences: max number of attendees allowed.  :)
+
+commit 4259898d0a6066e57e218586303bea466a2292d5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Oct 19 14:18:16 2021 -0500
+
+    pushes to prod
+
+commit 440800f2b6d7c554014a95873861a9264febce79
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Oct 18 00:40:57 2021 -0500
+
+    pushing to test server
+
+commit 764a713e81ce5ea59f640ca6d8af22fd1f8ef26c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Oct 18 00:39:00 2021 -0500
+
+    comments out modifying url to render images and converts type from imageRef.location.path_.slice(-3) to lower case to render videos
+
+commit 0b535cf6128974f3d6ed544109a076651d584713
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Oct 15 02:51:36 2021 -0500
+
+    On pages/corporate.js, replaces placeholder with value = {this.state.nameThisActivity && this.state.nameThisActivity} and onChange={e => this.setState({ startDate: e.target.value })} so that existing text isn't greyed out but is displayed and is editable.  On /activity.js and ./pages/index.js, type.toLowerCase === 'mov' allows us to recognize MOV and mov file types and remove them from the immersive experience image cards because they render as empty rectangles.  In corporate.js, sets database immersiveActivity[0].dateStart on this.state.startDate, and destructures and sets all key values from immersiveActivity[0].dateStart, for which this.state has initial values startDate: new Date() and endDate: new Date().setDate(new Date().getDate() + 1).  The image thumbnails, for which the image compression is 800 x 800, are determined through the Firebase URL.  Installs webshim, jQuery, and React-DatePicker.
+
+commit 1e2663be2b620c8751006eebc52e14fe6c920685
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Oct 11 02:54:07 2021 -0400
+
+    following Sohan's local.js, includes ReactPlayer library from 'react-player' to render .MOV files, which are on the Firebase URL on the immersive experience showcase.
+
+commit f7af02b2e73729e18d4e744a63420dc411ae4f93
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Oct 8 01:54:29 2021 -0400
+
+    On pages/qooleybiz/index.js, removes the Other category as an option from the dropdown menu.  Removes displayName form and attachment to `data` object being posted in submitProfile to /user/updateProfile.  Removes displayName from the Edit Profile page.  Includes Immersive Activity price range and Immersive Activity Duration on the bottom of the /local View Profile page.  On /activity.js, fixes Virtual, Virtual Virtual Virtual display by changing it to Virtual after making sure that the fields are equal to “Virtual” or continues to display the activity address!  ./pages/qooleybiz/corporate.js form no longer requires a start date or an end date.
+
+commit 0df9a0655a473d2b6b2c73122e238844a82bfb40
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Oct 6 22:57:19 2021 -0400
+
+    On the main page ./index, the title of the experience card expands up, not down; on the .helloThere div which is the container div for the main page cards, changes justify-content from center to flex-end, and height from nothing to 40vh; there's a subtle difference between height auto and height 40vh.  The height is the same for all cards, including the Comedy cards!  There's a 100 character limit on the title for submitting an immersive experience on ./pages/qooleybiz/corporate.
+
+commit 448a359b7bb5788beb546502967e693dd98eb6b8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Oct 6 22:28:14 2021 -0400
+
+    Experts can create paragraphs by typing line breaks, which are used to split the immersive activity description on /pages/activity.js.  On qooleybiz/corporate all fields are required because the document title is used to identify the Firebase experiences collection document, along with the expert email.  On pages/activity.js, the experience name from the database and the experience name from the URL are trimmed of whitespace before making the check for equality :).
+
+commit 00d82f604e019fb94ba688d97744265a2233ff4e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Oct 5 21:12:52 2021 -0500
+
+    Between ./pages/qooleybiz/index.js and ./pages/local.js, on ./pages/local.js, containerClass={‘react-multi-carousel-list’} instead of containerClass={‘react-multi-carousel-list react-multi-carousel-list-immersive’}, which along with right: ‘0’, width: ‘100vw’, makes the immersive experience carousel on the View Profile page not fit along the left side of the page, but fit near the center of the page; this is the ideal position.  Moves title to the top of the immersive experience card so that it can and does take up the full space of the title.  On ./pages/qooleybiz/index.js specifically on the Edit Profile page, changes activity title from the letter x to ×, which is the multiplication symbol.  On ./pages/index.js, where immersiveActivitiesExist, sets immersive activity on carousel only if moment().isAfter(dayStart) and moment().isBefore(dayEnd) so that if the expert wants to host Experience ABC from October 15th-November 15th, it should only show up on the website under Immersive Experiences between those dates.  Only displays the cards that are within the start date and the end date.  Fetches current date; if the current date is greater than the start date and less than the end date, then displays it.  Any of the artists and experts can create Immersive Experiences… if they are already approved, they can create experiences without any approvals.  Displays swal alert if immersive experience is requested to be deleted via async deleteExperience(experienceEmailAndName).  Are you sure you want to delete after clicking button.  Aligns cards the same way on both View and Edit profile pages!  Removes validEmails array being used as a criterion for pushing to the immersive experiences carousel in pages/index.js; validEmails is created based on Object.keys(allUsers), which contains the categories identifying each user, for which allUsers is the array of all users grouped by category being displayed on the website.  That is, allUsers[category][I].email is the email for the expert at that category name :D.
+
+commit 7e0cee44242a601a2998abb822be5ce9ee07c519
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Oct 4 23:42:10 2021 -0500
+
+    Adds asynchronous deleteExperience function which deletes the experience defined by the experience email and name separated by one space, and passed to the deleteExperience function from the button onClick event handler which prevents default and calls the this.deleteExperience function, and is the rightmost part of the flexbox title div.
+
+commit bfff8b1d9cc4760be779afbabeddd55cdf39440c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Oct 3 02:13:19 2021 -0500
+
+    Reduces the size of the existing immersiveActivityDuration className and includes it on index.js pages for the immersive experience duration, puts title on bottom of card with special formatting distinguished in globals.css by immersiveExperienceCardH3 versus helloThereH3, restyles immersiveExperienceDuration with white-space: nowrap; and padding-bottom: 0.75em; to fit its flex-box.
+
+commit 6cb7972dff2c5e95eb09fd250bac4945e660ebb5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Sep 30 00:49:48 2021 -0500
+
+    Turns form, e.target.elements, into a variable accessible from within swal.  On /qooleybiz?true sets a href to target = "_blank" to open new tab, including e.preventDefault() to prevent redirecting to /local?userId=' + this.state.profileData.username.  On qooleybiz/corporate, changes *value* to placeholder to prepopulate form fields, and on qooleybiz/corporate wraps uploadPhotos in try/catch block to log errors to the console.  To prevent file.type is undefined error, checks for the existence of file.  From pages/local.js, removes handleButtonClick function from experience card onClick because it is unused; a href sends the logged-in expert to `/activity/?email=${immersiveActivities[i].email}&experience=${immersiveActivities[i].immersiveActivity.nameThisActivity}`.
+
+commit 1a41e4306da97808a02db4288b480eba306cf2e8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 29 20:43:14 2021 -0500
+
+    Removes plus button to add a new Immersive Experience from the View Profile page at pages/local.js, and adds the event to the submitForm swal .then function, and in which generates two forms to submit to /user/updateImmersiveExperience depending on whether or not form.street.value && form.city.value && form.state.value && form.zipcode.value are given.
+
+commit 369950379d475647f3cccf36a414d7e604babbc0
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 29 20:16:21 2021 -0500
+
+    changes api url to https://backend.qooley.com
+
+commit e099143d59bf5bb7eadc57b47854241032b93f38
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 29 20:09:38 2021 -0500
+
+    On the main page, adds some space between the price filter and Comedy, or Immersive Experiences; puts a break underneath the price filter regardless of what the category is :).  Clarifies the use of additional pictures on Signup: Upload Pictures and Images of Yourself.  Makes it an optional field.  When submitting an experience, displays a pop-up message which says, "Thank you for creating your experience!  Once your profile is approved, your experience will be visible on the website.  For any questions, please contact us at admin@qooley.com" after you hit submit.  If it's immersive experiences, then only the experience shows up and not the expert.  Conditionally focuses on address fields based on the truth value of this.state.requestAddress.  Adds required={false} so that the error, An invalid form control with name='zipcode' is not focusable., is fixed.  Styles seal background-color to #5f04542d;.  Adds swal alert message with accompanying .then((willSubmit) =>  { … function which conditionally continues the immersive experience submission code and sends the expert to Router.push('/login?redirect=/qooleybiz’).  Only pushes expert card with profile picture if if (category !== 'Immersive Experiences') { is true, that is, if the category is not Immersive Experiences.  The plus button has a greater margin on the pages/local.js page to follow along with the Edit View which is /qooleybiz?true.
+
+commit dd34a3eeb3bdda290521438cc9002c63debc4626
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 29 00:13:38 2021 -0500
+
+    Adds second || or required condition: || this.state.allCitiesWithExperts.includes(city) to the pushing of city buttons, so that on the main page all cities for which we have experts are turned into city buttons.  adds conditional pushing of Immersive Experiences header to displayRows, and within refresh() adds validEmails array which contains the emails of approved experts and is used to conditionally render Immersive Experience Carousel :).  The Immersive Experience Carousel displays only if there are experiences.
+
+commit 818a608e638cae3a74f330a6632a7a269a28f13d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Sep 28 01:33:59 2021 -0500
+
+    Changes text from Explore Our Experts to Explore Our Experts and Experiences, increases the margin from the top for the add new experience + button, makes immersive experiences div H3, so larger :), adds .immersiveExperienceDuration class and styles it like .helloThereStars, makes immersive experience card square 40vh by 40vh, makes background transparent for immersive experience card!
+
+commit 0d0d0a01a37d9b3d90d50168623659402f459c08
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Sep 27 23:51:26 2021 -0500
+
+    With regard to last time's changes which are to put some space between the cards, to be able to see the whole title, make the font slightly smaller so it fits in two lines; should automatically go to the next line if it doesn't fit in one line!  The plus button always goes after the last experience.  Makes Immersive Experiences on the View Profile page title larger and gives it space.  On qooleybiz?true, the edit profile.  When you click a card, the same qooleybiz/corporate page shows up with the information filled in for editing because people are going to make typos!  We display the name of the experience for the immersive experience.  Enables localhost:3000/local?userId=deangladish26 to render by using the immersiveExperienceImageUrls variable itself instead of this.state.immersiveExperienceImageUrls, because it takes a while to set variable values on this.state.  Changes the url slug because the URL slug is putting an = sign in front of each query key, because these are key:value pairs; this.props.router.query is an object.  Adds line breaks <br /> between the Immersive Experiences header before and after, and changes the font size from the h3 to the h2 HTML tag.  Imports { withRouter } from "next/router" and exports default withRouter(Activity), changing routes for example to localhost:3000/activity?email=aaaaaabc%40email.com&experience=the%20second.  this.props.router.query takes time to load so instead of putting it at the beginning of (async) componentDidMount, it can be put at the end of componentDidMount.  So the route is this.props.router.query with the object { email, experience, edit } and for which we can destructure email, experience, and edit: let { email, experience, edit } = this.props.router.query, for which const setShowcaseItems = this.setShowcaseItems.  Fetches images at email for Firebase immersiveExperienceShowcase Storage Bucket and experience data *filtered* from /experiences/search/all.  The required format for Form.Control *value* property is "yyyy-MM-dd".  Sets the date and adds initial value property in the JSX on Form.Control.  Sets the duration, transfers it from immersiveActivity[0] fetched from /experiences/search/all to this.state.immersiveActivityDuration from within componentDidMount.  {} && within JSX allows us to do shortcircuit evaluation to execute the code even if the this.state.immersiveActivity[0] prerequisite for .category doesn't yet exist!  Runs this.deletePhotos; button onClick = { e => console.log requires e => to be stated, parameters are based on this.props.router.query email and before that, *edit === 'true'*.  Renders the button conditionally on edit === 'true'.  Styles Delete Photos button based on Submit button Inspect Element.  On qooleybiz/corporate edit mode, prepopulates Form elements sent from e.target.element, the react-bootstrap library.  Cleans up console logs.
+
+commit 3605ff7cd8c01a1b7baf0e5415f717dce133fdf5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Sep 26 21:44:38 2021 -0500
+
+    Adds space between the cards as a margin.  Removes unused code related to the Immersive Experiences carousel and the Form.Control version of External Links, for which we have TagsSubmission component which sets the externalLinks value on pages/qooleybiz/index.js’s this.state from within TagsSubmission.  Immersive Experiences carousel cards have the greatest width needed to accommodate the image width, and to the right of the Immersive Experiences image carousel there is the plus button which redirects to the /qooleybiz/corporate page.  Customizes the title H3 on each card so that the card titles are small enough to be longer and still fit within 2 lines; on all divs by default overflow is visible.  Removes commented-out carousel for this.state.immersiveExperienceItems.  On pages/local.js, removes existing carousel for this.state.immersiveExperienceItems.  Adds React Multi Carousel with Immersive Experiences Cards to the View Profile page, called ReviewCarousel.  Adds &${immersiveActivities[i].immersiveActivity.nameThisActivity} to the a href on the cards for pages/index.js, pages/local.js, and pages/qooleybiz/index.js.  Fetches the activity information based on the second query object given after & in the URL slug, based on the Router.query arguments.  On pages/qooleybiz/index.js, redirects us to /qooleybiz/corporate/immersive activity email=&immersive activity name=&edit.  qooleybiz/corporate has the logged-in  /user/getProfileData immersive activities collection for the logged-in expert.
+
+commit 5f138f4c59e1d28f979c5274ece7118b0f10e289
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Sep 25 17:05:12 2021 -0400
+
+    changes api url to deploy to test server
+
+commit 5b9ae608f9cf3b8459baf109d4f044521a7ed641
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Sep 25 16:43:36 2021 -0400
+
+    Provided that First Name and Last Name are separated on /signup, separates First Name and Last Name on /qooleybiz.  Centers the display on the experience page, and on the Edit Profile page shows the existing experience card; everything that you add will start filling the Edit Profile page from left to right.  That is if there are experiences linked to this profile, fetches those experiences as cards along the line of the main page cards.  The same card from the main page shows up on the expert logged-in Edit Profile.  On pages/qooleybiz/index.js, which is the signup page, last time we removed displayName.  Adds it back - displayName is not redundant because displayName is different from First Name and Last Name.  Adds back Upload Images and Videos because these are for the artist/expert who can create multiple immersive experiences each of which also carries its own Upload Images and Videos feature specific to each experience, on the next page /qooleybiz/corporate.  Changes displayName from textarea to input, and refactors the data value from displayName to displayFirstName and displayLastName, with regard to which the /user/updateProfile API route and Firebase does not have any restrictions on the names of the data fields which are submitted by the new format of the Signup Page with name='displayFirstName' and 'displayLastName'.  Adds Immersive Experience Image Carousel to the Edit Profile Page.  Changes background color and border of .react-carousel-item to 'none', and only renders immersive experiences for the current expert.
+
+commit 3fc949544fc695b26661e700a036c336b3fd5962
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Sep 23 01:20:51 2021 -0400
+
+    on the activity page, imports moment and swal to allow request booking form fields to function, restores timeChange function, adds link as part of the expert name.  On pages/local.js, includes a button which links the logged-in expert to the /qooleybiz/corporate page which is our Immersive Experience signup page.  On /qooleybiz/corporate, completes styling including removing the black text color such that the color is consistent with the Qooley text color #5f0455, decreases size of headers by turning them into divs, adding line breaks and changing form controls for Name This Activity, Activity Category, Fill Out Information, and Activity Notes to add text for describing more information about your activity, and any special notes, providing space between lines and height for the textarea fillOutInformation and the textarea activityNotes.  Also removes Immersive Experience images and videos, while adding our eight selected category options in the form of a drop-down menu: these are Food and Drinks, Health & Wellness, Arts & Entertainment, History & Culture, Outdoor Adventures, Educational, Professional Training, and Volunteer Experiences.  On the Immersive Experience page Meeting Location form, puts State and Zipcode side by side, removes input reset Clear Form button, adds & symbol to category options and response.data.data.category retrieval of those options.  On ./pages/qooleybiz/index.js, makes sure to remove First Name and Last Name from the Signup page because they appear on the original /signup page, keeping phone number on the page and including the asterisks while removing the accompanying 'required field' text.  Upload Images and Videos for Expert Signup has also been removed for the sake of redundancy given that the option to Upload Images and Videos appears on the Immersive Activity Creation Page, and font has been aligned with the Qooley default fonts.
+
+commit d0d9fbc25cef0e66505ca977f69abcf39d0c7d02
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Sep 20 18:13:00 2021 -0400
+
+    moves the immersive experience editing feature to the Edit Profile page!  Through async componentDidMount() {..., fetches data from process.env.API_URL + '/experiences/search/all' with credentials true which fetches the `experiences` collection documents from Firebase, and based on the `experiences` collection documents' emails fetches the image URLs from the Firebase Storage bucket which is how we render the immersive experience image gallery/carousel on the Edit Profile page.
+
+commit 64caaf7a3a3a26879884cdee67dba58af4e01a48
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Sep 17 02:09:21 2021 -0400
+
+    On activity page, removes default profile picture because the default profile picture shows up during the data load which doesn’t fit every experience situation; instead of showing a default image while the database loads, we are going to require the artist who signs up for the Immersive Experiences category to have a profile picture; the artist should have a profile picture when they sign up for an account to put a face to the experience.
+
+commit bd998d5971823a245409f31ee1a95ea7ab1d22f5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 15 23:06:52 2021 -0500
+
+    removes some console logs for clarity; to keep runtime data flow in order, puts showcase construction and state setting within the await firebase.storage().ref... call.  Makes the imageRef getDownloadURL async/await to allow setShowcaseItems calls to be asynchronous.  Instead of being rendered when the arrow buttons are clicked for the first time, the value of this.state.showcase is allowed to be completely populated at the time of the rendering.  That is allows the promise to resolve if the data has not been yet fetched.  Whether or not the immersive experience image gallery is fetched asynchronously, the immersive experience image gallery gets updated continuously; without a promise, render() happens sooner than this.state.showcase is populated.  On /qooleybiz/corporate, removes background color and navbar color to match Edit Profile Page :).  Removes cover image and adjusts height.  Since the immersive experience image card for email12308902@email.com on localhost:3000 is not rendering the sample image of the immersive experiences being displayed, it's important within update() about creating HTML as in <Card.Img src={immersiveExperienceFirstUrl ? immersiveExperienceFirstUrl : 'https://images.unsplash.com/photo-15.....'}, it's important that the data immersiveExperienceFirstUrl should be available when render calls for it.  This is one of the traits of async functions-their return values are guaranteed to be converted to promises!  An async function is a function that knows how to expect the possibility of the await keyword being used to invoke asynchronous code.  Converts brainhubeu/react-carousel into a carousel with slidesPerPage measured as the number of images in this.state.immersiveExperienceItems, as a carousel without arrows which is neither centered, nor infinite, and not draggable.
+
+commit 12e8d05a00a7d020d015c059e09ea14b8298cbe6
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Sep 14 17:17:40 2021 -0500
+
+    Adds a plus button to the experience feature for generating a multi-faceted image carousel experience with a button that is present so that we can add new experiences.  Makes the expert experience image carousel thinner; it has no reason to be taking up the whole width of the page.  What can cause data to be loaded in a different order in React... elements on this.state not being there some of the time such as this.state.immersiveExperienceImageUrls?  Resizes carousel, styles plus button based on Qooley colors, links the button via new tab to /qooleybiz/corporate, and adjusts the height of the image to be shorter.  On pages/local.js, verifies the existence of this.state.reviews before accessing this.state.reviews.length === 0.  If this.state.loggedIn is not true, then the plus button to add more experiences does not display so that only experts can add experiences which fits in with our vision for the website.  Besides, the button directs to the /qooleybiz/corporate page which redirects to the /login page if you aren't signed in so you'd be prompted to sign in to access req.session.user.email which is part of the document title of the new immersive experience document or part of the email key of the existing immersive experience document at that email address.  :)
+
+commit 8b83dc8b31659bed5cb463fde3b46e19116d08ec
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Sep 13 23:14:47 2021 -0500
+
+    shows Experience cards, one per experience, for each artist!  On /local.js, creates social media icons even if there are no reviews.  Creates experience images carousel!  Displays expert even if unapproved, displaying each image from the expert's immersive experience.  On /activity.js, displays expert name, category, profile picture which redirects to the expert page at /local.js.
+
+commit a7802bfe03afee0b8f2bf266bd1202163d937834
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Sep 10 21:17:15 2021 -0400
+
+    moves Immersive Experience POSTs to Firebase collection ‘experiences’. At bottom of corporate page, removes message which says immersive experience is optional and which links to /qooleybiz/users.  Changes /activities/search/all to /experiences/search/all.  On pages/index.js, fetches immersive activities from Firebase Storage Bucket by email and separates them by email.  Displays an arbitrary image, the image on the url list at index 0, on the Immersive Experiences carousel associating emails with URLs.
+
+commit a4f71b7627bb4d238a31e5036ddeb9f5c3513f94
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Sep 9 23:14:41 2021 -0400
+
+    fetches URLs of the Immersive Activities and displays them as React elements in React Carousel, displays the activity titles in order, styles the Address and includes the requestUser function which enables the Request Booking Form, fetches images using the email address from this.props.router.query, displays activity title and activity.  Traditional functions keep variables in scope!
+
+commit c86e72d11135f1da98da86a535745a91f830b1aa
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 8 23:28:35 2021 -0400
+
+    connects test server frontend to backend and renames welcome message to the category of the experience
+
+commit 2f0f976beb4425a5bfd6e468c5c49d962814862b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 8 23:23:28 2021 -0400
+
+    creates frontend changes, fetches activities collection data properly and renders experience specific to the host!
+
+commit aadb8dc5723903636bffe9db569b34ff259e4126
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 8 14:18:09 2021 -0400
+
+    On the Immersive Experience Signup Page on pages/qooleybiz/corporate.js, adds activityCategory, activityNotes, and activityImages.  Adds mediaUpload array to this.state, gives the this.addMediaItem function to the ImageGallery component for which its inherited addMediaItem function updates the Firebase Storage tab, at the provided email address, with the immersive experience activityImages gallery.  The addMediaItem function captures the media on this.state and seeks to upload to Firebase Storage.  Provides Firebase Credentials, and includes the email address returned from req.session by the server when updating the Firebase Storage tab at email/immersiveExperiencesShowcase/file.name!  :)
+
+commit bbb8923e203edac0694629dde224a5527e0e006f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 8 08:38:37 2021 -0400
+
+    restyles immersive experience page ./activity
+
+commit df37efb53eafc01340a47446e62d07e8a69cb2d3
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Sep 6 21:52:25 2021 -0400
+
+    makes the Immersive Experience page at pages/activity.js look like the expert page at pages/local.js!
+
+commit d5dafb7cf23f964b7b77be650ebaec1b5eed1135
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 1 17:46:59 2021 -0500
+
+    includes all immersive experiences iteratively, and pushes to production server!
+
+commit bf9832b6eee2e03a9fc3857f790932a97218c6ec
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 1 17:02:19 2021 -0500
+
+    conditionally renders Immersive Experiences in the Immersive Experiences carousel.
+
+commit ccb75fbfb6659cd02a35f58b2854ea7237674482
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Aug 30 20:31:57 2021 -0500
+
+    switches API_URL to https://backend.qooley.com.
+
+commit f62063ca070260a8a528f0c9853978a53d7ddf66
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Aug 30 20:24:40 2021 -0500
+
+    Fetching all user data, includes immersive activities on the displayRows carousel!  Removes unused options object because it is unused, removes unused SortPriceButton object because it is unused, and removes commented-out blankProfilePicture import because it is unused.  Removes componentDidUpdate! :)
+
+commit d3946165b2420146babd380ca939cbc0f316cad7
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Aug 28 00:02:32 2021 -0400
+
+    On the Immersive Experiences submitForm, POSTS to /user/updateProfile, which _combines_ the request body data with the existing artist data provided on the original Signup page, then goes to the loggedIn View Profile page.  Temporarily comments out height: 40vh on the .helloThere class for the artist cards, to fix the error in rendering cards at equal heights with regard to our lovely Trigg Watson's expert card!
+
+commit 6467db9405cd36fdcf425cb695c89e11e4727c70
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Aug 26 18:25:46 2021 -0400
+
+    Transfers Google Address autocomplete to the In-person Meeting Location form, pushes the Router to 'login/redirect=/qooleybiz' when submitting, with form.category.value == "Immersive Experiences", the first signup page form at pages/qooleybiz/index.js through the submitProfile function, or when submitting the second signup page form at pages/qooleybiz/corporate.js through the submitForm function.  Adds the "if not /user/getProfileData, which is the if we haven't completed the first half of the signup flow, then redirect to /login?redirect=/qooleybiz which, because we aren't logged in, redirects us to the /login page." flow. :)
+
+commit 81693f9224dddd5154943c14d333db79be0908ab
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Aug 19 08:38:03 2021 -0500
+
+    integrates the Places API and the Google Maps JavaScript API :)
+
+commit 313bd0f9f3311266b8587dfde1e2cd3299dd967d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Aug 17 22:25:24 2021 -0500
+
+    removes react-google-font-loader to resolve the error, remote: ModuleNotFoundError: Module not found: Error: Can't resolve 'react-google-font-loader' in '/tmp/build_ebe28f20/pages/qooleybiz'
+
+commit e52281e0151c567fe95a7e803215850bb389f363
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Aug 17 22:04:01 2021 -0500
+
+    Based on the wording within the apps, which is really similar, puts the wording "What is the date range within which you want to host?".  Shortens the length of the fields, puts them side-by-side with the captions too: the first one is the start date, and the second one is the end date.  Both fields are on the same line!  Puts "How long is it going to be, when do you want this to be available?".  Once you've selected Activity Duration, it automatically populates that field.  Keep in mind that this screen comes up after they select the category Immersive Experiences; this is just an additional page that's going to go with the rest of the signup process.  Meeting Location address fields are a little more better in design: puts playful, professional but not too professional font and text a half point lower.  Font consistency is established across fields, text is smaller for Street Address, City, State, and Zip Code.  TODO: Integrate Google Maps. :)
+
+commit 4f45c74683de2c991de7b7e8e9ff8c856b44e825
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Aug 15 11:15:20 2021 -0400
+
+    adds stylistic changes including font, black and white color scheme, and address fields.  Captures value of all form fields in a console log!
+
+commit 42af5c5da39246179b0e461ae70398aca4c34240
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Aug 12 19:09:23 2021 -0400
+
+    On the second signup page: In the second field (how long is the activity going to be?), makes the field a drop-down where you can only select in 15 minute intervals.  Just like in the app, there is a drop-down showing 15 min, 30 min, ... all the way to 8 hours.  The live/in-person distinction is performed through a toggle button just like the QooleyBiz app, and the address field under "Meeting Location" only shows up when you select "In-person".  If the activity is virtual, then the Meeting Location is set on the second signup page's component state to "Virtual".
+
+commit 2140c0d959a8c6e3a83d96f3afdd56e1f528ce72
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Aug 12 12:50:43 2021 -0400
+
+    For second signup page (Immersive Experiences): adds Custom Menu component and adds Custom Toggle component, for Activity Duration selection!
+
+commit a6932e172a504152431782544328cfa9f044d418
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Aug 10 04:59:55 2021 -0500
+
+    comments out /user/getProfileData axios GET request so that we can see the rough draft without actually having to be logged in!
+
+commit 1a4abc551b0fbc0915d3425461ac05f3633a15ba
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Aug 10 04:52:13 2021 -0500
+
+    comments out redirect on corporate page
+
+commit ecf24a70ef7987d45b05ab6b668f31db7b3a48c8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Aug 10 04:43:56 2021 -0500
+
+    rough draft of the second signup page
+
+commit d4e7de3826f24535fe9510ad583c97273739d907
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Aug 10 04:41:58 2021 -0500
+
+    rough draft of the second signup page
+
+commit 5ef639cbfef989b868927935d6669b7b9fbb700b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Aug 7 16:32:56 2021 -0500
+
+    Within the loadAdminPanel function, generates approve buttons which are conditionally rendered based on this.state.activitiesStatus[i] which is derived from the approval status given by the server response, buttons which when clicked call this.approveActivity, display Swal alerts, and place the new activitiesStatus[i] on this.state!  Adds the approveActivity function which makes an Axios POST request to /activity/approveActivity with directions to the activityDocId and whether to approve or unapprove that activity.
+
+commit 20f3ff5f6682f2b5350f262c493e62fdea2b2159
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Aug 6 03:38:45 2021 -0500
+
+    There's a `See app panel` button which sets the appPanel typeToggle on this.state, this.state.typeToggle is the criterion for conditionally rendering the recursively flattened activities and the app_users Firebase collections.  When flattening objects, remember that autocomplete responds to shift + ( which allows you to continue writing without having to retype the real function name, and that when testing in React use try/catch so that errors can be printed to the console instead of nothing, and the program can continue to run.  If you choose to use This binding in React, write a traditional function instead of an arrow function because otherwise the value of *this* will be the context in which it is declared instead of that context in which it is executed, which will make This binding unnecessary.  Within it when using recursion refer to this.functionName.  Lists are a type of object, key:value pairings for which the keys are 0, 1, 2, ...
+
+commit 38506e43ac458c496b3f7dd824c7559c80575d7c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Jul 17 23:55:25 2021 -0400
+
+    throwing e/signup/saveUserToDatabase error before firebase user creation and signin!
+
+commit f74f16dc804bbf453c0e60a86dcd20d302392f4a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jul 12 22:09:07 2021 -0500
+
+    decreased font size of card titles so that they fit the names!
+
+commit d56cd3f95292693f89b8d982a503855c98c27c31
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jun 28 23:47:56 2021 -0500
+
+    and we got click on picture to expand the in-page picture view, and on the traditional, non-mobile display: hide the Carousel arrows!
+
+commit 938717dd66976a36df54056832cf02a9264dccf4
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jun 18 02:28:21 2021 -0500
+
+    All on mobile view: Enlarges expert media gallery and removes arrows, About Me, Request Booking, and Why should you book me? sections.  Centers Filter by Price and centers Filter by City:).  On Our Customers, puts two icons per row!
+
+commit 0be3b9791fabcc1e5845c9372d0ac325e9698deb
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jun 10 20:18:51 2021 -0500
+
+    removed unnecessary console logs and added the console log we want to catch the error with
+
+commit 75c9d7798d45c2cc80713923f8128827c428dfca
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Jun 2 00:22:49 2021 -0500
+
+    adds react google analytics
+
+commit f26c01d9a3216c2828eb5c2d2d55caaf5ce74199
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed May 26 23:48:53 2021 -0500
+
+    The Learn More button does _not_ take us to /qooleybiz; it takes us to /signup.  In the event that we go to /qooleybiz, the API route handler rejects our request with error code 400 so pages/qooleybiz/index.js redirects us to /logout which queries GET backend.qooley.com/logout which returns 400 (Bad Request) and is not caught as an error by the Logout component, AND we're met with a blank page :) So this commit makes the Learn More button redirect not to /logout but to /signup.
+
+commit f58b67695a45d3523a59f78440591f789de5b04f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat May 8 00:21:33 2021 -0500
+
+    changed .expertData to .artistData on response for admin dashboard
+
+commit 17e37a30c2e8c6f5d45c3528f1f0bfc86c00d2cf
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri May 7 03:29:47 2021 -0500
+
+    add new category: health & wellness
+
+commit 6020c536a4a83900ca8c40e442ea60adc16b619e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu May 6 14:42:14 2021 -0500
+
+    fixed typos
+
+commit 53b26408223859aa2a964b34ac2a69928231a34a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed May 5 22:58:42 2021 -0500
+
+    adding capitalization to Explore our Experts below!
+
+commit 6b958bd00f43f9be9c00f997dced0d88f0bc80ca
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed May 5 22:45:15 2021 -0500
+
+    changing artist to expert, and changing some text along with that
+
+commit 65643c7089b20708f2296df7f14ee4b5f3813715
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat May 1 05:50:34 2021 -0500
+
+    for the classnames thinkChicago, ..., redShelf shown on pages/index.js, changed background-size: 100%; and background-size: 100% 100%; specifically for .washburnUniversity, except .org55PlacesCom b/c otherwise the logo 55PLACESCOM would be too small, to background-size: contain; which allows the images not to overfill their appropriate space and fixes the problem of the top and bottom margins of the Think Chicago, PerkSpot, and 55 Places images getting cropped!
+
+commit 51ac669dce16a7a02dcdb4ffe83ab58c3b845267
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Apr 30 16:54:23 2021 -0500
+
+    Changed text background on About Us page to purple background #5f0455, added Contact Email to About Us page, made About Me field bigger so they can see what they are typing - doubled vertical height, fixed black space on background (made background fill up full screen on Admin Dashboard), added display name field to Edit Profile, added display name conditional rendering if display name is truthy to View Profile page (pages/local.js, which contains the View Profile page, logged in or not).  Added option for Don't Display on price range, both on Signup and on Edit Profile, which are both governed by pages/qooleybiz/index.js.  Based on price range, on the View Profile page whether or not we are logged in, conditionally rendering the price range. :)
+
+commit 7c0e9df41c27e4b2dabe4c88453d9ca2605d6761
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 24 15:58:19 2021 -0500
+
+    removed set https=true to get https=true
+
+commit e29f27e942447b3fccb4c1fe969fede1396bdb45
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 24 15:46:49 2021 -0500
+
+    set https true for all scripts
+
+commit 92bbc0beb6f03806bfa90dc031daac80b1b40703
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 24 14:59:11 2021 -0500
+
+    set HTTPS true
+
+commit 79c5b18cacc13799e4a6c1648b5f4264e5db942f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Apr 23 14:54:29 2021 -0500
+
+    changed backend.qooley.com to https
+
+commit 1272fb671dbfb9d5165df5d6d105c27f7ee43d01
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Apr 23 14:20:21 2021 -0500
+
+    changing backend to backend.qooley.com
+
+commit 559e847e1dd4c6b384bf3b78def6de343f120eaa
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Apr 23 14:19:42 2021 -0500
+
+    changing backend to backend.qooley.com
+
+commit b4558521b1bb65e1d3800b11c085664b401f70d6
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 20 02:04:43 2021 -0400
+
+    convert form.elements.email.value to lower case
+
+commit d33b12f7115cbae9b7ad27f4155e3a29736fb6c4
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Apr 19 03:13:34 2021 -0400
+
+    removed asdf from External Links :)
+
+commit 8ba473be05758937e1d6160df7ec38e07831976f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 13 00:47:50 2021 -0500
+
+    only attaching things to the data object if they've been changed.  image gallery has a count component which prevents rendering 52 times and then exceeding the React limit for which the component re-loads every time the state updates.
+
+commit dc90c941371fc34b457f571035e2c03c8d671e3a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Apr 11 22:42:48 2021 -0500
+
+    about me and external links are saving on Edit Profile page and the texts for all fields About Me, Why should you book me?, Fun facts, AND the Gallery Photos are showing up.  When you hit Save without modifying External Links, instead of erasing the External Links they show up now on the View Profile page because we are always putting them on this.state.externalLinks whenever the componentDidMount.
+
+commit 72262ba8593d4076b089291de91fb99a421f6a78
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Apr 11 01:09:33 2021 -0500
+
+    removed an if statement that prevents us from editing this.state.eexternalLinks when it has a length not greater than 0. :)
+
+commit e3d55e6c55ed0f0352eef92f7a7d8081e7bbfb89
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 10 19:53:06 2021 -0500
+
+    adds default cover images to view profile page when we are not logged in, in addition to the existing default cover images added in the previous commit which are visible only on the Edit Profile page once logged in.
+
+commit 33af1d343528a0bcda6c3448a08f895730aee319
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 10 19:32:50 2021 -0500
+
+    adds default cover images
+
+commit 9daa55ed5fc1855ba1c20920705a3b53fdde29f8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 10 18:55:38 2021 -0500
+
+    sorting users by price
+
+commit cae7f5023b3d7d7217fb2a0c259e275ebf941d0e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 10 18:35:09 2021 -0500
+
+    price range is showing up on View Profile AND on Edit Profile, Reviews section header is not showing up unless there are actual reviews! :)
+
+commit b9c93d57107f025a4a5d76196a660c356357c290
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Apr 7 18:15:46 2021 -0500
+
+    fixed the admin dashboard logout session's being regenerated on /admin/logout by including a request body as the second parameter when we call the POST /admin/logout route.  Fixed new bug wwhere the pictures, if they don't exist, cause an error in rendering.  Included All Cities option on mobile view on the mainpage :)
+
+commit 130dbccf1db289004fee84b56985c1b7043d9377
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Apr 7 00:46:37 2021 -0500
+
+    ncan access greyed out text on About Me on Edit Page, persistent login for admin dashboard (still need to do logout) using a cookie, price range with default pre-selected price range is changed to use a cookie, About Me on Edit Profile now properly renders the text on View Profile with line breaks instead of the text clumped together :)
+
+commit 310fe697f0a4a90ee6acddeff21774580bf7bcd0
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Apr 4 19:40:22 2021 -0500
+
+    fixed price range to 200
+
+commit ad79aea37062c92a953eaffdc891cac937b61870
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Apr 4 04:05:07 2021 -0500
+
+    updated price option from 100 to 200
+
+commit 8d2ff802339d3c08535711b21420de6c54360ebe
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Apr 4 03:34:11 2021 -0500
+
+    mapping this.state.profileData.bio to its appropriate line breaks :)
+
+commit c650bf68853f32ed58a3ad3f5cdc298c211e581f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 3 04:27:07 2021 -0400
+
+    fixed infinite login loop between localhost:3000/qooleybiz/ and localhost:3000/login?redirect=/qooleybiz/ by fixing the SAME undefined error as what we got on the carousel, the same *mediaItem.type is undefined* error *except* this time we're accessing mediaItem.type.includes('video') on pages/qooleybiz/index.js.
+
+commit 7c4dc88bb4ce026a4e714804e12134a4165e3335
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Apr 2 02:01:23 2021 -0400
+
+    moving reviewCarousel class
+
+commit 431dd7a2acee5bf686321e4ee1ff32aef2c43566
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Apr 2 01:47:02 2021 -0400
+
+    now we can view artist profiles even if they don't have a profile picture and made the hamburger menu black and grey, and the links on the menu fit the screen width!
+
+commit 8468b2b897b2d7ede567350c8d493744a0485c62
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Mar 31 20:12:06 2021 -0400
+
+    fixed arrow on mainpage, react pdf viewer, and external links as tags!
+
+commit 4bf85c2f6ac104a0ff39aead30cb3b48d0566bdd
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Mar 31 02:25:16 2021 -0400
+
+    added pdf viewer
+
+commit 5fc4fe0eb1c4f0d1103b31e3b4002c5c29535b8e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 29 18:26:30 2021 -0400
+
+    added react-tagsinput to regular dependencies
+
+commit 1d33b7bd080cbbac5be95ef45a180b40900b0489
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 29 18:17:39 2021 -0400
+
+    did npm install react-tagsinput --save --save-dev --save-exact so that heroku can load the missing module, react-tagsinput
+
+commit b823dafb201c6b18feb54971bb3aa75f29557a3a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 29 18:08:44 2021 -0400
+
+    removed initial values for external links
+
+commit e1c42285f9ac641c1cb745470e8395a70c7c6be7
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 29 17:50:11 2021 -0400
+
+    just fixed Improv and Games category rendering, and added tags for external links
+
+commit 5c6239125fc39f836fdda8e4e099c0d0e9061707
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Mar 19 15:36:40 2021 -0500
+
+    commented out all console logs including functions which only invoke console log
+
+commit 2c236858d217d33777dbb7dbfb66571205e245f2
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Mar 17 09:59:00 2021 -0500
+
+    price range preference is on signup qooleybiz page on a dropdown menu, it's being posted to firebase and returned to the browser from the server successfully.  When a new artist is signing up, there is a checkbox with terms and conditions link (to the pdf).  Added Terms and Conditions hyperlink on the profile creation page AND on the home page as well.  On the home page mobile view, using the same list of unique cities for which we have artists.  Filtering is working now, and all reviews forms submissions are saved to the database and are available on the Admin Dashboard.  On the frontend, did the city sort feature such that the city filter 'includes' the city of each user - city.includes(user.city) - and changed the filter by price and select city drop-down menu background color to the city buttons color.  Local time is being displayed on the email (admin@qooley.com) sent upon requesting an artist for example CST (Central Time), and on the artist page the reviewers' names and date fonts are a little smaller.  So when the review form is filled out, the whole form is on the admin dashboard, and we've gotten the terms and conditions and privacy policy documents uploaded as pdfs which display within the browser.
+
+commit 8e5fab02b1f060563d8a6ae47eda312dcdd14e78
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 16 21:43:07 2021 -0500
+
+    star ratings are being calculated on the frontend, and the averages are being successfully rendered
+
+commit 2ccdbeea65174add4344780659df2b149f2905c9
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 16 18:13:42 2021 -0500
+
+    only rendering cities for which we have artists.  Can log out of admin dashboard, persistent login for admin dashboard across refreshes using localStorage, arrows fast-forward us to the Explore Artists page using Nav.Link href from React Bootstrap.  Created script for cities that only displays city buttons that have users in them.  Made virtual smaller - specifically the green rectangle, not just the text.  The text is fine.  The main page needs to visually match the Qooley color scheme (#00ffff #5f0455), so I added those colors in to make it more standardized.  The background light blue color on the profile page has been changed to white (that was the #next__ css ID), and also removed black bar at bottom of respondBooking page by making the height fill the page.
+
+commit 3cda240d7c39f072ede91bf7b05fe0f729d87f93
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Mar 11 19:20:26 2021 -0600
+
+    changed backend to qoolbitz
+
+commit 2b2d2e9e1c464a310fec441a5038a227256f552f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Mar 11 15:27:37 2021 -0600
+
+    getting current time/date from the book an artist submit form, using moment.js.  We are using that to determine whether the time is valid and if not, we give them a sweetalert letting them know that they have to change the date to a valid one.
+
+commit 81d9dad4986b8acff129424be81808d97c2a659d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Mar 11 15:27:00 2021 -0600
+
+    getting current time/date from the book an artist submit form, using moment.js.  We are using that to determine whether the time is valid and if not, we give them a sweetalert letting them know that they have to change the date to a valid one.
+
+commit 9f745cb23e5a51989c7e59aef09a75cfd039bda2
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 9 21:04:45 2021 -0600
+
+    added new categories, speaking, coaching, event planning, and custom swag, onto the index.js pages state so that we can render them, with the appropriate short-circuit evaluation needed to prevent rendering errors (when there aren't any artists, which there will be).  And I removed some of the console logs just so we can navigate the console more clearly.
+
+commit fc8696e887f57986a197eb709d272a8ac847c6c5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Mar 7 19:43:27 2021 -0600
+
+    now rendering reviews properly - that means, with two horizontal lines between each one and with the proper .map and return <div> statements which allow the reviews to be rendered.
+
+commit 09ca63e6a35da21ee406bab788ca94048a562ef6
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Mar 7 20:11:32 2021 -0500
+
+    made text more readable on the admin dashboard by giving the reviews a specific width and justifying them to the left, among other things.
+
+commit 373a9d0fdf335519296854c7160145645f01e45d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Mar 7 02:55:53 2021 -0500
+
+    commented out extra 'why you should book' statement
+
+commit c9176227a05f1b40ba587a688b63d8499ccd05da
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Mar 7 02:48:19 2021 -0500
+
+    including everything on the admin dashboard about an artist, such as completedProfile, isCustomer, isLocal, priceRange, profilePic, reviews, showcase, username, whybook, and socialMedia.  And now every entry is easily separated into key:value pairs by justify-content: space-between; in CSS, so we can clearly see w(and read because the text is justified) each subtitle.
+
+commit 0dee2593c4c3a4e1cf65ab42d91414d5880bba35
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Mar 6 17:56:18 2021 -0500
+
+    Activity pictures are no longer mandatory!  That means, we can Edit Profile and View Profile, and only render the activity pictures carousel if the artist has uploaded them (if they exist).  The star review and review comments show up on the artist profile, as long as they are approved.  While you still can't browse the website when logged in as an artist (it keeps redirecting to the profile page), this is not an error!  And /sendReviewForm redirects us to the main page now, unless we are an admin.  On the external links section, we are successfully translating the links into http or https, instead of mounting them on localhost:3000.
+
+commit 5548e16725ed06bccd7704baa84eb1bc92acc279
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Mar 4 22:33:33 2021 -0500
+
+    added alert messages using sweetalert js
+
+commit 004c94c83233cecccf8bf65f1c8b6ec0c5f95f56
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Mar 3 21:21:01 2021 -0500
+
+    removed text borders/shadows, getting card images from local default profile picture or alternatively from the database (which should be returning the default profile picture but for some reason is 403 forbidden), made the weak password notification message show up through method chaining of the .then statement (which needs a .catch after it), email address already in use notification, profile image is the only required image upload
+
+commit d4242f798fb5285726231f919fe3242532714fa0
+Merge: 0021f47 6659a6c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 2 22:35:12 2021 -0500
+
+    Merge branch 'master' of https://github.com/gladishd/qooley-temp-backup-my-edits
+
+commit 0021f475cd0bf87e4a25a02acb5c1235c9c23928
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 2 22:30:40 2021 -0500
+
+    made edits with sohan: removed the second signup page and included custom user id (by appending the current count to the username) in order to allow users with duplicate first and duplicate last name to make accounts.
+
+commit 6659a6c90db3e346f42432a1f3fe76542bd45aae
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 2 22:30:40 2021 -0500
+
+    made edits with sohan
+
+commit 075ba4eac25295a57e4b03c1ac13560f2249d037
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 1 20:59:53 2021 -0500
+
+    now on the signup page, we can upload activity pivideos and images, profile pictures, and cover images.  Kanishka, Sohan and I bound the functions on the admin portal component to the component itself (this binding), and edited the signup page drop-down menu for default Comedy category - now it's just Select a Category.
+
+commit ff3c08f55eb5310b361fd8448a77f21356f7460a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 1 02:18:57 2021 -0500
+
+    fixed confirm password field by changing z-index of the text field because there was a div covering it, made the Fun Facts and External Links sections optional on the profile sign up, added option to include profile pic and cover img (commented out right now because it isn't actually enabled on the server).
+
+commit 0f4d69fb08427a98ea8c026b7144f991ff74e442
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 1 02:18:39 2021 -0500
+
+    fixed confirm password field by changing z-index of the text field because there was a div covering it, made the Fun Facts and External Links sections optional on the profile sign up, added option to include profile pic and cover img (commented out right now because it isn't actually enabled on the server).
+
+commit 9bdbddc09aeb7956cf124db7b81b5e6a347d23d1
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Fri Feb 26 17:20:10 2021 -0500
+
+    review form changes
+
+commit 42646441eb3aa8d3fa07d7edd10086d1d8bbf24c
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Fri Feb 26 17:19:33 2021 -0500
+
+    changed review form
+
+commit 72868ed83d1e87a7e0d53d1479b4f2f0e211b1e2
+Merge: a2729f7 1d8cef0
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Fri Feb 26 17:02:31 2021 -0500
+
+    Merge branch 'master' of https://git.heroku.com/qooley-frontend into master
+
+commit a2729f7351ca69f5f71f24f1b91da87ec9b5f94f
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Fri Feb 26 17:02:26 2021 -0500
+
+    blank
+
+commit 1d8cef00bb2d2c745a9ddd9f75f42313205867bc
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Feb 22 00:28:53 2021 -0600
+
+    swapped out the image, made 'sign up to be a local Qooley artist' a subheader with a smaller font, standardized the font with outline for titles, shifted the arrow down on the front page
+
+commit 70fcdec0529d4cd6daad03b8624b50159c5bf923
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Feb 21 16:23:55 2021 -0600
+
+    we fixed the login issue by making showcase rendering conditional on whether the showcase exists
+
+commit b2715937672fc2421ccb3158aa58622dec62fe01
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Feb 19 16:39:10 2021 -0600
+
+    put back everything the way it was - newest release!  Although, there's the screen flip issue on login and signup.  So, the error is with response.data.data.showcase in pages/qooleybiz/index.js
+
+commit e7918a54bdee891879f3fc5f515639a3b044d8d5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Feb 19 15:51:56 2021 -0600
+
+    let's try https backend qoolbitz.com instead of http
+
+commit 3f30f9f9fe4b2729cbd5290846dcfaa238ef1491
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Feb 19 15:22:12 2021 -0600
+
+    for real this time because last time I actually ended up copy and pasting the same code although I did git fetch from Heroku after I rolled back my changes to Sohan's last deployment
+
+commit 58709863a1519f0a63d585e953815e25e777d15f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Feb 19 15:13:31 2021 -0600
+
+    restoring old login.js and old signup.js
+
+commit 738433f75583cff59bb185b2e631693ac6f3344c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Feb 17 21:31:10 2021 -0600
+
+    changed the API URL from https://backend.qoolbitz.com to http://backend.qoolbitz.com.
+
+commit 0421282c2eacdf9d0a77025285b3f2e12d4efc0d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Feb 17 11:43:00 2021 -0600
+
+    changed the backend url to backend.qoolbitz.com in next.config.js
+
+commit 0ae8104e753dc2039303ec9169c01d230a3d18c9
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Feb 16 17:24:08 2021 -0600
+
+    about page, login and signup pages added and scaled
+
+commit 31c5fa209459dd13841f644de7d13240a3b9c324
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Feb 15 18:33:30 2021 -0600
+
+    things are almost there with the signup and login pages, almost to figma form thanks Sohan
+
+commit 7fe7db1970d7b1359110db5191f143d85760b603
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Feb 14 23:30:25 2021 -0600
+
+    finished about us page after doing a bunch of resizings for different screen sizes
+
+commit e6de8a757cec4d55a55e7b3a95299cf124a66743
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Feb 14 21:34:11 2021 -0600
+
+    todo: adjust the about us page such that the flexbox overlays the top/bottom halves both, overlays those background divs
+
+commit 0062d248c379c9e376e0335e1700255d3e0d9d5c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Feb 14 00:54:11 2021 -0600
+
+    everything is scaled on the first section of the main page, it is all scaled
+
+commit 8fe13c13f4e3e5feadaa78df4cbfbf639f7b89ce
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Feb 13 23:16:35 2021 -0600
+
+    committing now so that I can compare changes and then mredo them by making them exclusively for smaller screens
+
+commit 219000dec435f9d9573f74c6fedec9f2815dfb5c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Feb 10 17:18:07 2021 -0600
+
+    fixed the scrolling issue (you didn't know there was one but it wasn't showing the whole carousel, you couldn't scroll all the way through).  So I fixed that one by using border instead of margin around the card, and changing the widths
+
+commit dff03b7b54a4cba34b10206eacfd2e4afe6994b7
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Feb 10 16:47:09 2021 -0600
+
+    Fixed the margins on the video page, the why us page, and the customers page
+
+commit 1ef9699d71c5d671ef375a8eb8a736b430074349
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Feb 10 16:34:30 2021 -0600
+
+    redid the mobile optimization as well as different screen size adaptations.  Todo: consistency
+
+commit 86ffd33ef5105e60b6bbb5213e836415a1a651a7
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Feb 10 14:15:27 2021 -0600
+
+    now only using the new styles (calc with vw and vh instead of pixels) on all necessary divs (check them outONLY for screens that are at least 800 pixels wide
+
+commit f3e041f6349dea6b3baa9753983fef95712c8640
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Feb 9 23:36:26 2021 -0600
+
+    did compatibility for different screen sizes by converting pixels into vw and vh.  Todo: make sure this doesn't interfere with the mobile view
+
+commit 562338bc319e17b519b4d51edd3994928569a259
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Feb 9 16:59:12 2021 -0600
+
+    redid all pages on the main page in terms of flexboxes:)
+
+commit a1d087f0e260f2fd3f0bc358a6eece6a9f83a4a7
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Feb 8 19:50:06 2021 -0600
+
+    Decreased blur in images so that you can tell people are having fun (but you don’t know who it is), added drop-down menu on mobile view for city buttons (instead of having each individual button show up),  although the width needs to be increased so that we can see the whole carousel, the cards are wider and there is less space between cards without border, made background a little lighter on the artist page and changed the text to purple, made the design and format of each section on the main page more consistent, made the icons closer together (in a new flex box) on the social media part of the footer, modified the header font on the titles of each section, made hamburger menu only for mobile view and added different versions of it (two more, for edit and view profile), and todo: add all the information for the missing artists and documents for Terms and Conditions, Privacy Policy
+
+commit 045d5291e6f686d00cb4bd3ff18ed5ba62621c5b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Feb 8 18:01:50 2021 -0600
+
+    added drop-down menu for city buttons on mobile view as well as reduced the blur on the main page image gallery
+
+commit e5e1a9ed1b2ad3b958d705c0a39e0cbbb4cd3917
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Feb 8 01:50:06 2021 -0600
+
+    saving progress
+
+commit 4ebbbfefa483cf1629895beb1a11fe5d2fa6112f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Feb 4 16:30:29 2021 -0600
+
+    doing spacing of objects so that the website can handle bigger screens
+
+commit 7ea6ea09dd229a8cd852a61163113bf5691f6c2c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Feb 4 15:40:25 2021 -0600
+
+    did the image blur on the first section for privacy until we can get permission possibly, re-aligned the filter by price text to be on the left instead of on the center as was inherited from body based on the Figma schema, and turned the cards to a minimalistic setting
+
+commit 5c02d0092c2efdc67a466d88119f511ae3f53bff
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Feb 2 18:34:18 2021 -0500
+
+    review changes
+
+commit 0b3eab58262c65a99061f0a1356a41cd0fcc97ee
+Merge: 4595a42 842aa79
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Feb 2 18:31:28 2021 -0500
+
+    review changes
+
+commit 4595a42f7ccf960f0915f482354eb4383319da97
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Feb 2 18:30:31 2021 -0500
+
+    review changes
+
+commit 842aa7973eef4a81469e2863dd4b14e538ff3c38
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Feb 2 04:54:59 2021 -0500
+
+    fixed text alignment on the main page
+
+commit f750555b75448ca4590839e16dd10dfc6ad82dc0
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Feb 2 04:42:51 2021 -0500
+
+    the hamburger menu is added thank you very much
+
+commit 2049a3d5e6bcf6d0c3dd0888d8afd3b0e628134b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Feb 1 02:37:17 2021 -0500
+
+    fixed footer style to be gray
+
+commit 861ab7059ac4fe9cb11a583407a750835a06af23
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Feb 1 02:28:20 2021 -0500
+
+    putting new changes on, let me know if you want me to tell you about anything :)
+
+commit 5afda174daad5a6c029f8381ee69daa2a483702d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 28 18:22:25 2021 -0500
+
+    saving before changing position absolute
+
+commit ad090a4b2f1c40a44666a3ed4a993a52fc2e30a8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 28 16:12:50 2021 -0500
+
+    saving progress.  Also I deleted a lot of comments just to clarify things
+
+commit 3475993d4f4993945140e98e99f010340ec46d79
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 28 14:27:34 2021 -0500
+
+    got rid of commented code
+
+commit 2e0303290a68ed51e63d57290bb24384ef6b86b3
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 28 11:58:15 2021 -0500
+
+    ***********Last commit before implementing Sohan's changes
+
+commit 71f68745483d6d7a8fcac1a5be113929ff408649
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Jan 19 01:27:55 2021 -0600
+
+    made a lot of great changes
+
+commit 644a4291cd6294804d1fb374a34f204770750321
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Jan 19 00:24:26 2021 -0600
+
+    fixed UI
+
+commit 06dc18317869f3c0194ac730edb67d875f82a574
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 23:11:27 2021 -0600
+
+    changing some colors back and redoing the city button color to be the official qooley purple type
+
+commit bc4a3c9e7b2fc61b29d93db719a67a29ccfeb8f2
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 23:05:46 2021 -0600
+
+    got original gradient back'
+    '
+
+commit 0a3a20901cfc61ae9c9dfa6e3ce0824f541f4c1a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 23:01:03 2021 -0600
+
+    improved everything
+
+commit 9bbc23a13e5ab40371ea8dfea4e29c5eee123b5d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 22:59:51 2021 -0600
+
+    improved everything
+
+commit 4b2c65b034410af8008f0bdd847dc889ed5314ff
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 18:36:28 2021 -0600
+
+    doing mobile view stuff
+
+commit e93e765ec989079f08be79b383f36dd90878b25f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 17:57:04 2021 -0600
+
+    Finally figured out how to remove all margins, padding, thinking in terms of flex boxes, and adding a border to react-carousel-item when the user hovers on the .helloThere class which was added by me in order to provide a more inclusive (slightly larger) alternative to the built-in classname react-carousel-item.
+
+commit c6154664598140bc3b52a010a5f91022669edaaa
+Merge: dc56323 2f5fdcd
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 16:28:27 2021 -0600
+
+    committing sohan changes
+
+commit 2f5fdcd98c31c47d8497cb0c21f92cc9ee835539
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Jan 18 16:21:32 2021 -0600
+
+    new review form
+
+commit 9e7b23eff5816debde8979ba12b03a43cfc87514
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Jan 18 14:22:19 2021 -0600
+
+    no changes
+
+commit dc56323f754665531a7f05650be9f87982d1d622
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 04:37:17 2021 -0600
+
+    removed margins and am working on scrolling issue
+
+commit 0d7115af0fc18dc9a7c740893dad94b28223d02e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jan 17 05:28:50 2021 -0500
+
+    fixed a lot of stuff including putting padding on the right elements
+
+commit 96305cc607a230f3631479b84fdfe81ffdbe9021
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jan 17 05:25:41 2021 -0500
+
+    fixed a lot of stuff including putting padding on the right elements
+
+commit 8abd3f8a6dec42da3538c1b2c366f587edd17757
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jan 17 05:25:24 2021 -0500
+
+    fixed a lot of stuff including putting padding on the right elements
+
+commit 08ae729e94b65e8900fd7128a0e5297a90988bc2
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 15 15:50:59 2021 -0500
+
+    added last test server
+
+commit a6d95476e38cbf3d5b60dd06f5960ea9a4b9ceaf
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 15 01:05:38 2021 -0500
+
+    fixed spelling so PNGs load instead of pngs
+
+commit 14459f39fb913e3150d0bc4d77906690f7bc862a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 15 00:59:51 2021 -0500
+
+    made images more easily accessible by moving them from the original EOY_Post_Material folder to the public folder (the parent directory) so that next.js and heroku deploys work together and not just locally
+
+commit 4067d64e5159fe243a7e91ed5e7383084aa26b92
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 15 00:15:39 2021 -0500
+
+    fixed api url
+
+commit b883568d7c8e76b7d5efb579671757f56052780a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 14 23:52:20 2021 -0500
+
+    done with frontend
+
+commit 650a5d6674c9e79a4a00fa8ec14fe7efb904d891
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 14 22:52:03 2021 -0500
+
+    almost done with main page
+
+commit b893e4e79a60b29a6b35461ec17a48100ffb9d49
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 14 04:14:14 2021 -0500
+
+    switched the api url back to the heroku server in case we want to use it
+
+commit 80b1e56747242e2cdeb4413ad4c21064cc09ffde
+Merge: 8a761c6 5a4d2cc
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 14 04:07:35 2021 -0500
+
+    set the stage for the main page sections being filled out after doing the About Us page, and decreasing the visibility of the purple highlights
+
+commit 8a761c6da2b796b19aa7e9eac2343d5fd90b292c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Jan 14 04:05:03 2021 -0500
+
+    set the stage for the main page sections being filled out after doing the About Us page, and decreasing the visibility of the purple highlights
+
+commit 5a4d2cc62ec1415908b71bffdd71b7a8c9d227c6
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Jan 13 18:00:29 2021 -0600
+
+    twitter
+
+commit c40810500b50ba87ac602ffd119e67408c80907e
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Jan 13 17:55:56 2021 -0600
+
+    bug fix
+
+commit 97409ad26e14cef0ef93aa3116eab6b6a07317fb
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Jan 13 17:43:03 2021 -0600
+
+    bug fix
+
+commit 5f08ccc32e530d61aaab5b735982425ca828643d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 11 01:58:54 2021 -0500
+
+    fixed the glitch with the no default export on isTouchDevice by deleting it  as a separate file, and I really do think that this is the greatest feature of all time because it allows artists to interact with the photos they uploaded and at least make sure they upload the right ones, and also fixed the glitch where images is not defined initially for heroku"
+
+commit c0ba10540e364cdd77232065bbebcb94c4129d03
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 11 01:55:30 2021 -0500
+
+    fixed the glitch with the no default export on isTouchDevice by deleting it  as a separate file, and I really do think that this is the greatest feature of all time because it allows artists to interact with the photos they uploaded and at least make sure they upload the right ones"
+
+commit 79b026d2d06e558613eee3a355a091d348b5185e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 11 01:51:32 2021 -0500
+
+    committing to add the greatest feature of all time - the image gallery
+
+commit 2d2fee6c5ecd64c8773e6a14073abcad627371f5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sun Jan 10 00:10:09 2021 -0500
+
+    last version
+
+commit c24ec711c7b9e2336b81edd18a6aa2cf12299269
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Jan 9 23:17:51 2021 -0500
+
+    got the image gallery thing going
+
+commit ab75abe935cad78a9e0a6d55b93ce81b6da7af9c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 8 03:19:31 2021 -0600
+
+    fixed rotation - we should spin the card or something when we click on it
+
+commit 39ee43c9ab0355bd205b3eee9e2069eeafc3a978
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 8 02:53:19 2021 -0600
+
+    now the color doesn't spill over the edge of the card
+
+commit 6ab7fcc5fbc3ac857cb2eb6351b06a72b643ff24
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 8 02:39:44 2021 -0600
+
+    made the color transition more smooth
+
+commit fe5820c3d0965379f605615135b96a4eb34c28f8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 8 02:39:34 2021 -0600
+
+    made the color transition more smooth
+
+commit 9a28445920d9b99353905c6736e23ef063c18123
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 8 02:32:54 2021 -0600
+
+    made the transitions more smooth
+
+commit 9905d7fcb9d791b3f1d43f6b83c1c1e37a77b5af
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 8 02:23:58 2021 -0600
+
+    Making edits to transitions on cards
+
+commit 2f078019a87a7932c9b63dad253fadb01a57c8ba
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 8 02:23:44 2021 -0600
+
+    Making edits to transitions on cards
+
+commit e07f99bb89156df388cca0065e5c86d9ae73b750
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Jan 6 00:19:51 2021 -0600
+
+    did the card flip
+
+commit 3fdf94d07ab25873035acfd6b0175e29f4d57af3
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 23:21:55 2021 -0600
+
+    everted dropzone and profilepic to how they were before my intervention, because I'm going to redo the image gallery aspect of it
+
+commit dcea92b3a71aec1d1c847bf1925f847f9d447c6b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 23:21:28 2021 -0600
+
+    everted dropzone and profilepic to how they were before my intervention, because I'm going to redo the image gallery aspect of it
+
+commit 07abb3814108269b0b776d6d92d15d163a6df5b0
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 22:46:13 2021 -0600
+
+    changed the API url back
+
+commit a62446ff85bc706a72b8b5fca175a57ea52c38a0
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 22:45:38 2021 -0600
+
+    put the correct styles on each carousel, even after you do the price filtering
+
+commit 086abce270dab677621fd29ab56dbb6820cda041
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 22:27:49 2021 -0600
+
+    Committing before I send this to Heroku"
+    "
+
+commit 26c2ff0613d81c13af6f6a13f8e8d9199af1427e
+Merge: ccd7e73 742060a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 17:41:14 2021 -0600
+
+    fixing merge conflicts
+
+commit ccd7e7300ccef867de3729874e6499ee5149904a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 02:38:26 2021 -0600
+
+    changed the view height so that the carousel does not push the other carousel down every time you hover on it
+
+commit b20d763a28f95d5296cc494996ad8d563e64efff
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 02:34:24 2021 -0600
+
+    reduced the size of the dollar sign and of the stars
+
+commit 6902defcee629003176798c5503be9600d7d7b87
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 02:31:39 2021 -0600
+
+    increased the z-index for the hello there div (the one with the card), and now things are overlapping in the right way (the one you hover over is shown over the other ones
+
+commit b5e2d71eaa9be256e156cf08ebde1f9760c1ddc4
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 4 02:25:15 2021 -0600
+
+    some pretty nice frontend stuff on the cards, doing all the special effects when you hover over them including background color, transformations and border stuff
+
+commit 742060a4c520361faa5d20dcb755fbeaa280130f
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Dec 30 10:07:25 2020 -0500
+
+    new edit profile page
+
+commit 63fc4e9a61491ac8b626e6b156798ba5372d14bd
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Dec 30 10:06:17 2020 -0500
+
+    new edit profile page
+
+commit c048eff8289cf2ef68cc8113f12998242caf7770
+Merge: 87aa13c 1300619
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Dec 29 03:02:18 2020 -0500
+
+    so we are able to view uploaded images now, just need to display them properly in a carousel
+
+commit e0e8368feee4e0015cc02123a9318df8557775e4
+Merge: 1300619 87aa13c
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Dec 28 15:01:25 2020 -0500
+
+    merged changes
+
+commit 87aa13c9a00d2313abe9848e3c323fc112500a79
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Dec 23 00:39:57 2020 -0600
+
+    switched the API URL to the heroku, deployed one
+
+commit 00796ebf3c1c738c3ce0faae6bda5cbbbd370304
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Dec 22 22:18:47 2020 -0600
+
+    fixing this non-https insecure error
+
+commit cea64663cc7338a8145e4d639377096c0d74acd1
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Dec 22 21:56:09 2020 -0600
+
+    removed first error message
+
+commit 9e665b868879c5eaa1608076fbbe5f7246e3da3e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Dec 22 21:49:54 2020 -0600
+
+    revising the API URL back to the official server
+
+commit 13006193027dd91683c74b1bdf2753a2c790eb79
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Dec 22 16:38:49 2020 -0600
+
+    changd radio buttons
+
+commit d99f58577a538d31e3d4a2afd6646be2f86cab5f
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Dec 22 16:07:47 2020 -0600
+
+    cover image changes
+
+commit 824c84db2af7b94e44de04e95e8d6d9f7c78c693
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Dec 21 19:58:05 2020 -0600
+
+    committing before
+    saving progress
+
+commit 39498d8ac78edffd6895d9a79382ef934b1296b8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Dec 21 16:19:50 2020 -0600
+
+    doing field validation
+
+commit 119882b84fa076c8bd8701aae92326a4490331f4
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Dec 19 21:33:07 2020 -0600
+
+    minor bug fixes
+
+commit 7255f9a04fb6fb3b0bbaff64b4b0fd88fc6ecaf7
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Dec 18 02:44:32 2020 -0600
+
+    figured out sliding cards
+
+commit fb1cad2b41982a23a35b4cd1bfec08de8e03ff3d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Dec 16 17:18:07 2020 -0600
+
+    finished the arrow stuff.  may need some scaling/universalization
+
+commit dbddd1b13df9b57a30af59559df3af981ede1e27
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Dec 16 15:18:55 2020 -0600
+
+    I want to put this on my own branch
+
+commit 98b1ec90f1734fe43d1e9270f78dd4d23382a9fb
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Fri Dec 11 13:19:05 2020 -0600
+
+    latest push
+
+commit 963dab94a22d2803fe44af64ab98fac5e5e323a1
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Nov 25 22:49:24 2020 -0600
+
+    more changes
+
+commit e9df50715bbd5a27a5bc858981cf5d7a5872fe16
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Nov 23 15:11:10 2020 -0600
+
+    minor changes
+
+commit 036b02fcfae9e52e0846d98abf92f3043f69eaf4
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Nov 16 00:00:49 2020 -0500
+
+    hello
+
+commit e8f7511b463aebb5f07d8df9fd29e1e32bf53fd2
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sun Nov 15 18:02:36 2020 -0500
+
+    added accept and reject for qooleys
+
+commit a0e92c702ddcddd1dbbf0d435eb27ebe8950db12
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Nov 14 16:59:35 2020 -0500
+
+    quote website added
+
+commit 7c2ba34bc7588637364839c4efafe3172d1d6581
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Nov 7 18:22:29 2020 -0500
+
+    new changes
+
+commit 796f3ac7d438c32a1e5eacbd9da6463ad0452908
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sun Nov 1 17:47:49 2020 -0500
+
+    price filter changes
+
+commit 6bf07c97da0d2f365e20414d3c119ab28ddb20b8
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Oct 20 13:08:12 2020 -0400
+
+    lots of changes
+
+commit 722fd3afc83681db1c31e679b08c35e1b8947055
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Fri Oct 16 13:45:48 2020 -0400
+
+    carousel arrows and other small changes
+
+commit 8175e99346b4b62261e583a37cdc826791e48866
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 18:01:23 2020 -0400
+
+    fixed social icons
+
+commit 897f15f0a6a9cb73481021b48dd7e2492ba841f2
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 17:58:13 2020 -0400
+
+    fixed social icons
+
+commit 12d4f0052e7dbd1f212f316b96c43a7fd6221ca1
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 17:39:59 2020 -0400
+
+    hello
+
+commit dd83fe7a4ac576227be86f5ab4506789d8c8d8f2
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 17:39:43 2020 -0400
+
+    hello
+
+commit 595d2e70d8e91169f0cf387be5d69581fff29a17
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 17:28:29 2020 -0400
+
+    many changes
+
+commit 7896498c493d867d0a42ac5f5ddd6a63819c354f
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 16:59:09 2020 -0400
+
+    many changes
+
+commit 37aeb88d2a928fa48579166b60998faaba654cfe
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Oct 8 23:19:08 2020 -0400
+
+    signup error alert
+
+commit 254cddefc401a654a153ec12fa7dbc53369ad2f1
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Oct 8 23:02:48 2020 -0400
+
+    sort feature and minor bug fixes
+
+commit 1585f637221245d9c7796bc148c8fc9a579af7ad
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Oct 8 23:02:27 2020 -0400
+
+    sort feature and minor bug fixes
+
+commit f6a063c3296d7937a69061b8f51f7154e8f93fb1
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Oct 6 23:28:47 2020 -0400
+
+    social media links and bug fixes
+
+commit 55b80fb0953626f1d37ef6982df5aa134d6e5d36
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Oct 6 23:28:10 2020 -0400
+
+    social media links and bug fixes
+
+commit 814ab5e7b1764c00dc83c67ac124120a46e692dc
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Oct 5 17:28:28 2020 -0400
+
+    lots of changes
+
+commit d2f3253a4b371cc49075bec9739dcdbdc2899b69
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Oct 5 17:10:19 2020 -0400
+
+    lots of changes
+
+commit c2844bf2771685c23cddda060de3e4c3b927da52
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sun Oct 4 18:07:00 2020 -0400
+
+    lots of changes
+
+commit 2d57d2a4f26de3f1b6f066920fe0cb01104dfc8b
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sun Oct 4 18:00:30 2020 -0400
+
+    lots of changes
+
+commit c90f2dfe4bf367e8ef73c7d3409335ee4b44f1cd
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Sep 8 18:05:57 2020 -0400
+
+    changed ur;
+
+commit 033713d057ed475c90f57d32aa29613d12104268
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Sep 8 18:03:48 2020 -0400
+
+    added reviews
+
+commit a112530cc0fa0045fa4b27d6833d0ee75a9ba6a0
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Sep 3 18:05:05 2020 -0400
+
+    fixed backend url
+
+commit 8bac0817f30c8463a51e844c751faf6ad739da08
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Sep 3 18:01:41 2020 -0400
+
+    not fun
+
+commit 05cf25086db30bc3427be956146c522f3cab3003
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 10:58:15 2020 -0500
+
+    nextjs app
+
+commit dcc524639500a890833fd4aae4a5f07a8c2974bb
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 10:26:31 2020 -0500
+
+    nextjs app
+
+commit 36630925129124d40e5004c76ec0710a2b9b8d43
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:17:20 2020 -0500
+
+    awddw
+
+commit 4678c0129a09389b66c6dd170d44b4cff3414f02
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:07:20 2020 -0500
+
+    more changes
+
+commit 502090a9e90df744dad11e8db7ff858053172ac7
+Merge: 40bc433 c850fbc
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Aug 25 15:10:39 2020 -0500
+
+    Merge branch 'master' of https://github.com/gadgetman6/qooley-website
+
+commit 40bc43359bb1309e11fcc9a8e0c88a746447e368
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Aug 25 15:10:25 2020 -0500
+
+    new commit
+
+commit c850fbc0253956e4f2cf38a1b3667a8757204e0c
+Author: gadgetman6 <sohan.sarabu@gmail.com>
+Date:   Sat Aug 22 15:01:02 2020 -0500
+
+    Update next.config.js
+
+commit b40a66b3885df8d5810b619e456bc124427b5b2a
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Aug 22 14:51:02 2020 -0500
+
+    app
+
+commit 5e257bf919b98bb9a3fbc1fc329063448b63b9d2
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Aug 17 15:09:11 2020 -0500
+
+    Initial commit from Create Next App

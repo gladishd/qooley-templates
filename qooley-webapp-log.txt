@@ -1,0 +1,603 @@
+commit f105212da2b3d6a41362a50ac2fd56ee96d13fa6
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Mar 11 02:16:27 2022 -0600
+
+    user email is the key because we should only ever be logged in
+
+commit 43963c28e6785b7a172d6499fb3dde48e830202f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Mar 11 02:05:08 2022 -0600
+
+    Uncomments the user object requirement for making the collection document query so that the /user/getProfileData API route checks whether the user is logged in, that is whether the user object, which is for checking logged in status and which predicates user.email, exists. On /user/getProfileData, removes console log for req.sessionLoginProfile.email because we are querying the document at req.session.email, req.session.profileData.email, or user.email.
+
+commit f850403be07c67310e1154f73562dfd17ffe42c4
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Mar 11 01:07:19 2022 -0600
+
+    On /local/getLocalProfile, sets the req.session.email = email because sessions are desired, and on /user/getProfileData, retrieves the req.session.email || req.session.profileData.email, which are available.
+
+commit d3cc5aa27fab13d226610bce64c0096e8de5827e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 8 16:35:53 2022 -0600
+
+    to resolve redirect to https://www.qooley.com/local\?userId\=testuser1, sets email from testUser@email.com to user.email in /user/getProfileData :)
+
+commit e8694c4fb9c0c1464fa69fadf46186dc8617fb82
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 8 01:06:14 2022 -0600
+
+    Resolves merge conflict by displaying running or alternatively running, process.env.PORT upon app.listen. Places API keys in process.env: IOS key, messaging sender id, app id, and stripe key are moved from server.js to .env, and referenced via process.env.IOS_KEY, etc.
+
+commit f31271566108048e7616410fc47c7220993a2f0a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Jan 22 23:08:33 2022 -0600
+
+    creates /venue/allVenues API route, which fetches the database venues collection and then returns the document data.
+
+commit 86b9b0f804340d2b4a3ef708d3d6c973295914ed
+Merge: f59dba0 c0e8996
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Nov 23 19:48:44 2021 -0500
+
+    Merge branch 'master' of https://git.heroku.com/qooley-webapp-test-2 into HEAD
+
+commit f59dba07f21a011b27a57766a03ad6977954c2c8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Nov 23 18:45:46 2021 -0600
+
+    creates the app.post /venue/submitVenue API route, which awaits a post to the database collection 'venues', adding req.body.  The port value of 4000 is given to allow a different port for testing, in the case that the port 5000 is occupied.
+
+commit c0e8996f9a3786c5546546289e6462f05ec920cc
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Oct 21 00:38:57 2021 -0500
+
+    test email only
+
+commit d68cc3276d4178aa82281487cb8a3e054769f1fc
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu Oct 21 00:35:40 2021 -0500
+
+    test
+
+commit 75aeb6d03921e0fdcb0982cb0710482592a4cd68
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Oct 4 23:34:37 2021 -0500
+
+    Adds allowed methods to all requests, including preflight requests: GET, POST, OPTIONS, PUT, and DELETE.  For Delete, adds API route at app.delete /experience/deleteExperience, which, within the try/catch block, takes the email and experience name separated by a space from the request body and submits a DELETE request to Firebase.
+
+commit 9a3db7475f35c926e513297bda08ad0b9e2ef782
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 22 22:22:14 2021 -0400
+
+    on /auth/setLogin and /user/getProfileData, console logs req.session to see if it exists at both API routes
+
+commit ed2c7622ed9df67df261415c693f349fd82873e4
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 22 21:42:33 2021 -0400
+
+    declares the session before the return; statement in the access control middleware
+
+commit 7fd6cd603331b52cc19967c7a057161e40e65921
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Sep 18 21:22:57 2021 -0400
+
+    Because the server at qooley-webapp-test-2.herokuapp.com has a GET /user/isLoggedIn 400, then GET /user/getProfileData 400, then infinite redirect loop error message: Error: Request failed with status code 400, then GET /logout 400, Uncaught (in promise) Error: Request failed with status code 400 workflow for which the /user/getProfile is where the qooley-frontend-test-2.herokuapp.com server reaches its first error message after reaching the /login page which results in the server logs checking for log in, user undefined, false, not logged in :(, by adding return res.status(204).end();, the Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client error, which actually means you have already sent a response to the client after a request is made, but you're trying to send the response again back to the client, can be resolved :).  return res.status(204).end(); will return the response and not run the rest of the code after the next line so that we don't call res.send() more than once which will throw an error.  This is only necessary for shortcircuiting the function.  We would not recommend to return the send() call itself, but rather after it!
+
+commit ff2436142b5583bc0ff0cbab9a40b1f8bb1418b5
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 15 23:06:29 2021 -0500
+
+    removes some console logs for clarity :)
+
+commit fbaa23c4ed4a643c7693b1b6bcf5d780f2eb9361
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Sep 13 23:18:47 2021 -0500
+
+    creates /usernameByEmail API route, which returns the userId paired to req.body.emailAddress with which the frontend connects /activity.js to expert data!  From the API Route /local/getLocalProfile, returns email as part of the profile data.
+
+commit cf26ed1c18d44558a575df4d25e6779c408791c8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Sep 10 21:18:34 2021 -0400
+
+    On /user/updateImmersiveExperience, creates a unique id, through .collection .doc .set, based on `${req.session.user.email} ${req.body.immersiveActivity.nameThisActivity}`!
+
+commit a7db172491e5d17e28ff256d01d77b635cf74456
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 8 23:24:31 2021 -0400
+
+    /activities/search/all API route which fetches the activities collection
+
+commit eed7df15c6f89c3d14aadb11b7a2958ba04acdb2
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Sep 8 14:24:55 2021 -0400
+
+    On the backend, creates /user/updateImmersiveExperience POST route which updates the activities collection on the Firebase Storage tab at email/immersiveExperienceShowcase/file.name!
+
+commit 458a63f2ea9b05ef03e823fa5142e43351665c69
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Sep 4 21:26:12 2021 -0400
+
+    To make signup accessible on the test server, enables access to XMLHttpRequest across origins by providing access-control-allow-origin header on the requested resource if the origin is in the allowed list, defining res as an argument.  Enables response to preflight request to pass access control check, giving it HTTP ok status.
+
+commit 71115c114755fe8016d59844c0ecd310f3fc313c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Aug 28 00:04:09 2021 -0400
+
+    temporarily comments out approvedProfile requirement on /getAllLocals, and removes commented-out reviews average rating!
+
+commit d34fc9739c3ca7909c037d6d303349cc75a9760b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Aug 7 16:21:09 2021 -0500
+
+    On /admin/loadDashboard on the database activities collection fetch, includes the doc.id which uniquely identifies the collection key in the database.  On /activity/approveActivity, based on req.body.approve, conditionally updates the doc located at req.body.activityDocId with regard only to status!
+
+commit f171e53b047d97e448263d598cb3fdc13aecfff3
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Aug 6 03:47:14 2021 -0500
+
+    chaining .then statements to add, from the Firebase database, the app_users collection and the activities collection.  What this does is enable the data to be transferred with status code 200 through axios.get to the frontend
+    
+    !
+
+commit 72e0cdd2f64ea444ca0f85fb842608d385da09bb
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Jul 17 23:52:37 2021 -0400
+
+    field validation for /signup/saveUserToDatabase :)
+
+commit dd0d63e0b23da4d879cb26c936da539a9914db1a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri May 7 00:45:48 2021 -0500
+
+    removed thttps://qooley-frontend-test-2.herokuapp.com/'s trailing slash because the req.headers.origin isn't being sent with a trailing slash (why?)
+
+commit fbe44767ab3f617d195b11b10719e88ea244fe7c
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Thu May 6 23:48:35 2021 -0500
+
+    adding test server to allowed domain origins
+
+commit 50d8179722963aa348d4a61580d9b022061de433
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue May 4 01:21:49 2021 -0500
+
+    took the rejected booking request email and made it more polite :)
+
+commit 5fe05a52863fe85736efc8687ee323e3c583ee04
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat May 1 01:17:08 2021 -0500
+
+    including localhost:3000, https or http because we may just want to be able to query backend.qooley.com without having to run the backend server locally.  Remember that the displayName: localData.displayName was not originally included because it did not exist originally - to this end, let's include displayName on the profileObj which is directly based on the result of the db GET, since the profileObj has the excellent purpose of allowing us to include (or exclude) each property of the original object returned from the POST /local/getLocalProfile route, which is what this commit does!  Ideally, we should make use of this intermediate API route between the database and the frontend!
+
+commit 43611fc458fb723d97e0812926b356de7dd44bcd
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:48:58 2021 -0500
+
+    re-added cors with allowed origins/domains
+
+commit a73fb9bd422a3f103d02d49751198c0775ad576a
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:44:26 2021 -0500
+
+    added www.
+
+commit 00ace0656429a584671257febfa4760a8875a1fe
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:42:46 2021 -0500
+
+    removed backslash
+
+commit a6d39b34714f2e0c6f7714229936a537ae9d19c2
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:40:38 2021 -0500
+
+    add the cors within the first middleware function;
+
+commit b06c2388c5b543cb1d7b540c17f1b391e64078de
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:15:43 2021 -0500
+
+    commenting one of the cors out
+
+commit ab62bfdb6fc71f0efe34ad09e7445ccc533e6cb6
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:13:10 2021 -0500
+
+    pre-setting the value of origin
+
+commit 9696f90a058e24062580b37ff3e26441a0e18955
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:10:16 2021 -0500
+
+    back to https for now
+
+commit b3db65e35a7681d9b56b428f73d88005dd8b5176
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:06:34 2021 -0500
+
+    changed origin to http
+
+commit 1d345dbb809e8a86d0db7a4ea116915f352e8463
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:04:05 2021 -0500
+
+    testing out *
+
+commit 2c5bdf23d291a1383b806da058dc43c84c69310e
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 15:00:26 2021 -0500
+
+    hres.header instead of res.setHeader!
+
+commit 9d805e5a41269477c4d79332fcf431bbffb07b9d
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Apr 27 14:57:53 2021 -0500
+
+    changing allowed domain to qooley.com, insecure or secure
+
+commit 76507ba158f5324618d42067e15fdffa11d3fc14
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Sat Apr 24 03:19:48 2021 -0500
+
+    changed http to https for http://www.qooley.com :)
+
+commit 16c21f18807606ff584716d284579808511d8733
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Apr 23 14:37:27 2021 -0500
+
+    changed access control and redirect URL to qooley.com
+
+commit 9e128d5c44a6111cfd09e659e2ccf355645b9620
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Apr 7 18:16:36 2021 -0500
+
+    pushing to backend to make sure we have the latest version
+
+commit 7e354688bed12f7b66525d318e56fc9459f79381
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Apr 7 01:06:12 2021 -0500
+
+    changed access control and redirectUrl from localhost to qoolbitz
+
+commit 53cc7dc060ec14723f195b69d4c987379b29ea4f
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Apr 7 00:43:58 2021 -0500
+
+    new /admin/logout API route and /admin/loadDashboard has req.session.adminLogin on it now
+
+commit 262b647bfa9caa2d8dfa286eb357cc72490323dc
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Apr 5 04:04:57 2021 -0500
+
+    pushing to restart server
+
+commit feb6bb67f8f5e5c59db626f0e7e4a201486ef880
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Mar 31 22:34:59 2021 -0400
+
+    added star rating average db post (firebase database) on the getAllLocals API route!
+
+commit 96ca8c0220807ee867aaaf97eb92a499ef7d6afb
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 29 18:01:00 2021 -0400
+
+    pushing again to the backend just to be sure
+
+commit a11b56d10ba9a6e8b039063c45f4bde328df5e0b
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Mar 25 20:01:54 2021 -0400
+
+    average star rating
+
+commit 81ed351133d99ba18ea6d82bb69f5f355fad3494
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Mar 25 19:57:13 2021 -0400
+
+    average star rating
+
+commit ea0dc50ba871690b38c303eea641d71990b2a6c6
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Mar 17 09:59:00 2021 -0500
+
+    (sohan edits and) changing redirect URLs
+
+commit f21fbdb0c4da32060a5581a9bfc17fafd901e5f7
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Wed Mar 17 09:59:00 2021 -0500
+
+    sohan edits
+
+commit bcb2ebbcecfe0889cc09ed2adc84af249c101a5b
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 16 21:58:29 2021 -0500
+
+    yeah
+
+commit 8141d175cae9057a977eb66a77c929f3c0ddb5b8
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Tue Mar 2 19:52:59 2021 -0500
+
+    unique counter
+
+commit 23424d43a8b8d46e816b524b942f68db0f9ed0c9
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 1 20:56:48 2021 -0500
+
+    fixed /getAllLocals API route so that we get all artists, not depending on the .isLocal and .isCustomer booleans which Sohan added as test booleans previously :)
+
+commit e5edaf2090b98b43aa558cfa3adcfe8da9a08bea
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Mar 1 20:55:23 2021 -0500
+
+    fixed /getAllLocals API route so that we get all artists, not depending on the .isLocal and .isCustomer booleans which Sohan added as test booleans previously :)
+
+commit a8db0c7c0bbd789488be60a87d971d264e84f02b
+Merge: e1321ef 9e005ce
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Mon Jan 18 16:31:42 2021 -0600
+
+    Merge branch 'master' of https://git.heroku.com/qooley-webapp
+
+commit 9e005ceca78d378e1d787132525ec70638a17c06
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Jan 18 16:21:52 2021 -0600
+
+    new review functionality
+
+commit e1321efecdafedcf6b50557e465d408cb40ee6c1
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 15 16:10:53 2021 -0500
+
+    removed backslash so this server recognizes the frontend
+
+commit 457fc393aba11c7fb6d1da87d5de8ad812adb517
+Author: gladishd <gladish.dean@gmail.com>
+Date:   Fri Jan 15 15:54:51 2021 -0500
+
+    changed urls for new test server
+
+commit 066fa8b7eb11ba5e07de81eb7dc6416d0f3a8b6a
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Jan 13 18:12:32 2021 -0600
+
+    fixed backend link
+
+commit f4536b788f1152ac2116362f6993792bedca7545
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Jan 7 13:59:35 2021 -0600
+
+    changes
+
+commit 5106efb86524b2b3d93008062cfa3b456b5ff132
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Dec 22 16:07:15 2020 -0600
+
+    cover image
+
+commit 36ae694878bbd1e73b5c610795a3a8441add9a5a
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Nov 25 22:49:58 2020 -0600
+
+    more changes
+
+commit 8bd82f272d8851e31e2fe09a9bdb9266de5b7975
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Nov 23 15:10:55 2020 -0600
+
+    minor changes
+
+commit 23f3b4d3e1b11ef9fd593e9e1767b18fd6baa9f7
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sun Nov 15 18:02:05 2020 -0500
+
+    added accept and reject for qooley
+
+commit fab6467e4482e46b8d27816d03ad7c60e6ffdeb0
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Nov 14 16:57:19 2020 -0500
+
+    new changes
+
+commit 6c62307d202e889fe5acdc00b1ec728b963f945d
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Nov 14 16:49:34 2020 -0500
+
+    some email changes
+
+commit 76611008df617b1930b7b4ce105c6c21c25b30fd
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Nov 7 18:22:37 2020 -0500
+
+    more changes
+
+commit 6e5b26abacabbe1bbd1b06a5d6b6b7a3d321cf33
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sun Nov 1 17:46:55 2020 -0500
+
+    notify qooley when bookijng is requested
+
+commit b63902ac23fd06b996408284c7afabda6b79af1c
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Oct 20 13:11:50 2020 -0400
+
+    small changes
+
+commit cbb54f877fbed68632f4037e764f70ae3dbbe11c
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 17:57:53 2020 -0400
+
+    changed to normal domain
+
+commit 5740b29c3d4eec285dbd21adbb7848ce58bea421
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 17:24:03 2020 -0400
+
+    changed sohantest
+
+commit a0aac42c864d2f91399e8bbb4f7947fcb38992d3
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 17:21:54 2020 -0400
+
+    changed sohantest
+
+commit 4f54d0ef0ba4524665f764d058a01eb356dec0f5
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sat Oct 10 16:59:49 2020 -0400
+
+    more changes for user approval
+
+commit 6879c23cf7169c50b4fb15d10720293de307758f
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Oct 6 23:29:28 2020 -0400
+
+    social media
+
+commit 6c99dbb3d0a175f416549d50e45838fb624defdc
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Oct 6 23:28:25 2020 -0400
+
+    social media
+
+commit 5cc33d7f1e4daec6d3325d903a337d3917046469
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Oct 5 17:13:43 2020 -0400
+
+    lots of changes
+
+commit 18474cc2a0250df3d94838d7c260fa5a70b935a0
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Mon Oct 5 17:10:50 2020 -0400
+
+    lots of changes
+
+commit 01bc7db8787258087690e80a69cbf8a5b44f8615
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sun Oct 4 18:07:37 2020 -0400
+
+    lots of changes
+
+commit 06942332dc396503a07e5d930218efc2bd7283a9
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Sun Oct 4 18:00:53 2020 -0400
+
+    lots of changes
+
+commit a0f3267557fa5258ee5f62abc73182ad7cfe4ed8
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Sep 8 18:13:32 2020 -0400
+
+    changed url again
+
+commit 7587cc2a3142c46f21223b67a4ee1758e9d22c95
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Sep 8 18:05:30 2020 -0400
+
+    changed url;
+
+commit e0e009eaef5931bd08826f8d56608c72e32eb967
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Tue Sep 8 18:05:00 2020 -0400
+
+    added reviews
+
+commit 60d0f4268adeb690dc9b9aa608e18c7944d5251b
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Thu Sep 3 18:02:34 2020 -0400
+
+    server
+
+commit 6f254a8a35a471d5bbc21f2c2456fa6446e6e877
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 10:58:34 2020 -0500
+
+    more cookies
+
+commit ab2b41c2c512eae3a7df351274b8c6162587158b
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 10:16:11 2020 -0500
+
+    more cookies
+
+commit 5cf62eb2393dbbe134d11f231dd50d802ef065b2
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 10:13:26 2020 -0500
+
+    more cookies
+
+commit 5e3cda79ba5c904cc6d9cbf9ef6f5e99f3ddca62
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 10:07:19 2020 -0500
+
+    more cookies
+
+commit bc16af3520e67e9e838224980b5f24e9f1ebf489
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:51:54 2020 -0500
+
+    cookie session
+
+commit 423c7d7a38bf8bebd433829125399813d7607a3e
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:49:38 2020 -0500
+
+    cookie session
+
+commit 5026fce9665dc5e7563eb3649b09d9775c00924f
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:47:50 2020 -0500
+
+    cookie session
+
+commit 8d390bab68db48bb2294c6b59e0a2b49b5ba0f56
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:41:54 2020 -0500
+
+    coookies
+
+commit fa2655a7bd1fb94bc62b0a118167be44884ce0ad
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:35:11 2020 -0500
+
+    coookies
+
+commit 1adee10171f3806403c656ca253f6a6b551a981c
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:31:35 2020 -0500
+
+    a
+
+commit f82ebdb0142c27a5a6ba41e30ae175746c6a1aac
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:29:22 2020 -0500
+
+    cookies
+
+commit 60145650a1c3b4d5d65c3a880fcecfd2df41bed6
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:24:20 2020 -0500
+
+    cookies
+
+commit 103e0939a4b3eda84cd581752131c1615456a210
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:19:48 2020 -0500
+
+    cookies
+
+commit 23d90ad8d9dc3db2517a0ca9501fb7c125007b39
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:14:26 2020 -0500
+
+    fixed package.json
+
+commit 197e81cd495512272fc32e30fbc3c81d25137c9f
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 09:02:56 2020 -0500
+
+    fixed package.json
+
+commit 4621527a97397abb648e7df74d560aa4f57dba84
+Author: Sohan Sarabu <sohan.sarabu@gmail.com>
+Date:   Wed Aug 26 08:59:13 2020 -0500
+
+    initial commit
